@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="./basic.styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.hls"
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+    clpp.install(clpp.dash.DashComponent);
+    clpp.install(clpp.hls.HlsComponent);
+
+    const videoEl = document.getElementById('video');
+    const containerEl = videoEl.parentElement;
+    const player = new clpp.Player(videoEl, { }, { containerEl });
+
+    document.getElementById('loadButton').addEventListener('click', () => {
+      player.open({
+        source: document.getElementById('sourceUrl').value,
+        autoplay: true,
+        preferredTextLanguage: 'en',
+      });
+    });
+
+    player.addEventListener('error', (event) => {
+      const error = event.detail;
+      if (error) {
+        console.warn('Error:', error);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Basic example</h1>
+  <div>
+    <video id="video" width="320" height="180" controls crossorigin="anonymous" playsinline></video>
+  </div>
+  <div class="controls">
+    <input type="text" id="sourceUrl" value="https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd">
+    <button id="loadButton">Load</button>
+  </div>
+</body>
+</html>
