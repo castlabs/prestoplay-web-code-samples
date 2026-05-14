@@ -1,4 +1,4 @@
-# prestoplay-web-code-samples
+# PRESTOplay Web Code Samples
 
 This repository contains code samples of how to use PRESTOplay Web SDK.
 The examples are framework-independent simple HTML files.
