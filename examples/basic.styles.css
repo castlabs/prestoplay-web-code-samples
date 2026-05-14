@@ -29,6 +29,7 @@ body {
   padding: 48px 24px;
   align-self: center;
   width: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
