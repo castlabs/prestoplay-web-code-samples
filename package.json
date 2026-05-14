@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@castlabs/prestoplay": "^6.33.0"
+  }
+}
