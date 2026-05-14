@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <title>Basic playback</title>
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,13 +51,19 @@
 </head>
 
 <body>
-  <h1>Basic example</h1>
-  <div>
-    <video id="video" width="320" height="180" controls crossorigin="anonymous" playsinline></video>
-  </div>
-  <div class="controls">
-    <input type="text" id="sourceUrl" value="https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd">
-    <button id="loadButton">Load</button>
+  <header class="footer">
+    <img src="../assets/logo.png" alt="castlabs" class="footer-logo">
+  </header>
+  <div class="page">
+    <h1>Basic playback</h1>
+    <p class="description">Example of basic playback of DASH and HLS content.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <input type="text" id="sourceUrl" value="https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd">
+      <button id="loadButton">Load</button>
+    </div>
   </div>
 </body>
 </html>
