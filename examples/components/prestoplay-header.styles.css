@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.header {
+  background: rgb(38, 42, 53);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  position: relative;
+}
+
+.header-back {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  left: 12px;
+  position: absolute;
+  text-decoration: none;
+}
+
+.header-back:hover {
+  text-decoration: underline;
+}
+
+.header-logo {
+  height: 12px;
+  display: block;
+}

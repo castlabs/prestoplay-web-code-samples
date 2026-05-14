@@ -7,7 +7,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../node_modules/@castlabs/prestoplay/clpp.styles.css">
-  <link rel="stylesheet" href="./basic.styles.css">
+  <link rel="stylesheet" href="./styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="importmap">
     {
@@ -19,6 +19,7 @@
       }
     }
   </script>
+  <script type="module" src="./components/prestoplay-header.js"></script>
   <script type="module">
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
@@ -51,9 +52,7 @@
 </head>
 
 <body>
-  <header class="footer">
-    <img src="../assets/logo.png" alt="castlabs" class="footer-logo">
-  </header>
+  <prestoplay-header back-href="../index.html"></prestoplay-header>
   <div class="page">
     <h1>Basic playback</h1>
     <p class="description">Example of basic playback of DASH and HLS content.</p>

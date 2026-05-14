@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Subtitle text styling</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.ttml": "../../node_modules/@castlabs/prestoplay/cl.ttml.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.ttml"
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+    clpp.install(clpp.dash.DashComponent);
+    clpp.install(clpp.ttml.TtmlComponent);
+
+    const videoEl = document.getElementById('video');
+    const containerEl = videoEl.parentElement;
+    const player = new clpp.Player(videoEl, { }, { containerEl });
+
+    document.querySelectorAll('[data-seek]').forEach(button => {
+      button.addEventListener('click', () => {
+        player.setPosition(Number(button.dataset.seek));
+      });
+    });
+
+    player.on('error', (event) => {
+      const error = event.detail;
+      if (error) {
+        console.warn('Error:', error);
+      }
+    });
+
+    player.open({
+      source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
+      autoplay: false,
+      startTime: 27,
+      preferredTextLanguage: 'en',
+      textStyle: {
+        backgroundColor: 'rgba(207, 0, 15, 0.75)',
+        windowColor: 'yellow',
+        fontFamily: 'monospace',
+        fontColor: 'green',
+        fontSize: '1em',
+        edgeType: clpp.text.EdgeType.DROP_SHADOW
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Subtitle text styling</h1>
+    <p class="description">Configure green subtitle text in monospace font with a shadow.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <button data-seek="27">Seek to 0:27</button>
+      <button data-seek="194">Seek to 3:14</button>
+      <button data-seek="340">Seek to 5:40</button>
+    </div>
+  </div>
+</body>
+</html>
