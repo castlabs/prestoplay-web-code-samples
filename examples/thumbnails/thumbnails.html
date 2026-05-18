@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Basic thumbnail rendering</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./thumbnails.styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.thumbnails": "../../node_modules/@castlabs/prestoplay/cl.thumbnails.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.thumbnails"
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+    clpp.install(clpp.dash.DashComponent);
+
+    const videoEl = document.getElementById('video');
+    const thumbnailPreviewEl = document.getElementById('thumbnailPreview');
+    const containerEl = videoEl.parentElement;
+    const player = new clpp.Player(videoEl, { }, { containerEl });
+
+    async function initPlayer() {
+      try {
+        await player.open({
+          source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
+          autoplay: true,
+          preferredTextLanguage: 'en',
+        });
+      } catch (error) {
+        console.error('Error initializing player:', error);
+      }
+    }
+
+    async function renderThumbnailForPosition(position, x) {
+      const thumbPlugin = player.getPlugin(clpp.thumbnails.ThumbnailsPlugin.Id);
+      const thumb = await thumbPlugin.get(position);
+      await thumb.load();
+
+      // 180px wide
+      thumbnailPreviewEl.replaceChildren(thumb.element(180));
+      thumbnailPreviewEl.style.left = `clamp(90px, ${x}px, calc(100% - 90px))`;
+      thumbnailPreviewEl.hidden = false;
+    }
+
+    videoEl.addEventListener('mousemove', async event => {
+      const rect = videoEl.getBoundingClientRect();
+      const navBarHeight = 45;
+      const y = event.clientY - rect.top;
+
+      // Show thumbnail only when user is hovering over the seek bar.
+      if (y < rect.height - navBarHeight) {
+        thumbnailPreviewEl.hidden = true;
+        return;
+      }
+
+      // Calculate the playback position from the mousemove event.
+      const x = event.clientX - rect.left;
+      const duration = player.getDuration();
+      const position = (x / rect.width) * duration;
+
+      try {
+        await renderThumbnailForPosition(position, x);
+      } catch (error) {
+        thumbnailPreviewEl.hidden = true;
+      }
+    });
+
+    videoEl.addEventListener('mouseleave', () => {
+      thumbnailPreviewEl.hidden = true;
+    });
+
+    initPlayer();
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Basic thumbnail rendering</h1>
+    <p class="description">Example of retrieving thumbnails for a DASH stream.</p>
+    <div class="video-wrapper">
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+      <div id="thumbnailPreview" class="thumbnail-preview" hidden></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -5,49 +5,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PRESTOplay Web Code Samples</title>
+  <link rel="stylesheet" href="examples/styles.css">
+  <script type="module" src="examples/components/prestoplay-header.js"></script>
   <style>
-    .site-header {
-      background: rgb(38, 42, 53);
-      padding: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .site-header img {
-      height: 12px;
-      display: block;
-    }
-
-    :root {
-      --bg: #f5f5f5;
-      --surface: #fff;
-      --border: #e0e0e0;
-      --text: #111;
-      --muted: #666;
-      --accent: #2563eb;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    .page {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 32px 16px;
-    }
-
-    h1 {
-      margin: 0 0 6px;
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
     ul {
       margin: 20px 0 0;
       padding: 0;
@@ -68,29 +28,27 @@
       border-bottom: none;
     }
 
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
     .desc {
       color: var(--muted);
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <img src="assets/logo.png" alt="castlabs">
-  </header>
+  <prestoplay-header></prestoplay-header>
   <div class="page">
     <h1>PRESTOplay Web Code Samples</h1>
     <ul>
       <li><a href="examples/basic.html">Basic example</a> <span class="desc">— Load and play a stream with HLS/DASH support</span></li>
+    </ul>
+
+    <h2>Thumbnails</h2>
+    <ul>
+      <li><a href="examples/thumbnails/thumbnails.html">Basic thumbnail rendering</a> <span class="desc">— Retrieve thumbnails for a DASH stream</span></li>
+    </ul>
+
+    <h2>Subtitles</h2>
+    <ul>
+      <li><a href="examples/subtitles/text_style.html">Subtitle text styling</a> <span class="desc">— Configure subtitle font, color, background, and edge styling</span></li>
     </ul>
   </div>
 </body>

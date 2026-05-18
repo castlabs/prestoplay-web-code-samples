@@ -39,10 +39,26 @@ h1 {
   letter-spacing: -0.01em;
 }
 
+h2 {
+  margin: 28px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 .description {
   color: var(--muted);
   font-size: 0.9rem;
   margin: 0 0 20px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .clpp-container {
@@ -61,11 +77,12 @@ h1 {
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 input[type="text"] {
   flex: 1;
-  min-width: 0;
+  min-width: 100px;
   padding: 8px 10px;
   font-size: 14px;
   font-family: inherit;
@@ -101,17 +118,4 @@ button:hover {
 
 button:active {
   background: var(--accent-active);
-}
-
-.footer {
-  background: rgb(38, 42, 53);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-}
-
-.footer-logo {
-  height: 12px;
-  display: block;
 }
