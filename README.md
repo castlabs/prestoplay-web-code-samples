@@ -25,4 +25,8 @@ npx http-server -c-1
 
 Open http://127.0.0.1:8080 and choose a code sample to run.
 
+Some samples use third-party libraries or plugins and may require additional
+configuration before they work in your environment. Places that need to be
+updated are marked with `TODO`.
+
 [PRESTOplay for Web Apps]: https://demo.castlabs.com/

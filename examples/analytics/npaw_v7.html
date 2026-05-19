@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>NPAW v7 analytics</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://artifact.plugin.npaw.com/artifactory/plugins/js/7.3.21/NpawPlugin-es5.js"></script>
+  <script src="https://artifact.plugin.npaw.com/artifactory/plugins/js/7.3.21/NpawPluginAdapters-es5.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.youbora": "../../node_modules/@castlabs/prestoplay/cl.youbora.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.youbora"
+
+    const defaultSource = {
+      name: 'DASH VOD',
+      url: 'https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd'
+    };
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+    clpp.install(clpp.dash.DashComponent);
+
+    const videoEl = document.getElementById('video');
+    const containerEl = videoEl.parentElement;
+    const player = new clpp.Player(videoEl, {
+      npaw: {
+        // Fill in your accountCode here, https://npaw.com/
+        accountCode: 'TODO',
+        errorFilter: (error) => {
+          // A custom function that converts clpp.Error to a NPAW payload.
+          // Use this if you are not satisfied with the default error reporting.
+
+          const getEnumValueName = (enumObject, value) =>
+            Object.keys(enumObject).find((key) => enumObject[key] === value);
+
+          const categoryName = getEnumValueName(clpp.Error.Category, error.category);
+          const errorCodeName = getEnumValueName(clpp.Error.Code, error.code);
+
+          return {
+            code: `${categoryName} - ${errorCodeName}`,
+            message: error.message,
+            severity: error.severity,
+            metadata: {
+              // fill in metadata based on opt_data according to your needs
+            }
+          };
+        },
+      }
+    }, { containerEl });
+
+    const sourceUrlEl = document.getElementById('sourceUrl');
+    const triggerRecoverableErrorButtonEl =
+      document.getElementById('triggerRecoverableErrorButton');
+    const triggerFatalErrorButtonEl =
+      document.getElementById('triggerFatalErrorButton');
+
+    document.getElementById('loadButton').addEventListener('click', () => {
+      player.open({
+        source: {
+          url: sourceUrlEl.value,
+          type: clpp.Type.DASH,
+          name: defaultSource.name
+        },
+        autoplay: true,
+      });
+    });
+
+    triggerRecoverableErrorButtonEl.addEventListener('click', () => {
+      player.onError(new clpp.Error(
+        clpp.Error.Severity.RECOVERABLE,
+        clpp.Error.Category.PLAYER,
+        clpp.Error.Code.HTTP_ERROR,
+      ));
+    });
+
+    triggerFatalErrorButtonEl.addEventListener('click', () => {
+      player.onError(new clpp.Error(
+        clpp.Error.Severity.FATAL,
+        clpp.Error.Category.PLAYER,
+        clpp.Error.Code.HTTP_ERROR,
+      ));
+    });
+
+    player.on('error', event => {
+      const error = event.detail;
+      if (error) {
+        console.warn('Error:', error);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>NPAW v7 analytics</h1>
+    <p class="description">Example of basic DASH playback with NPAW v7 analytics enabled.</p>
+    <p class="description">Open the browser DevTools Network tab and filter for <code>youbora</code> to inspect analytics requests.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
+      <button id="loadButton">Load</button>
+    </div>
+    <div class="controls">
+      <span>Test out the error filter:</span>
+      <button id="triggerRecoverableErrorButton">Trigger recoverable error</button>
+      <button id="triggerFatalErrorButton">Trigger fatal error</button>
+    </div>
+  </div>
+</body>
+
+</html>

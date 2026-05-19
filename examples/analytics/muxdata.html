@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Mux Data analytics</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://src.litix.io/core/4/mux.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.muxdata": "../../node_modules/@castlabs/prestoplay/cl.muxdata.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.muxdata"
+
+    const defaultSource = {
+      name: 'DASH VoD Clear',
+      url: 'https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd'
+    };
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+    clpp.install(clpp.dash.DashComponent);
+
+    const videoEl = document.getElementById('video');
+    const containerEl = videoEl.parentElement;
+    const player = new clpp.Player(videoEl, {
+      muxdata: {
+        // Check this guide to get the envKey:
+        // https://www.mux.com/docs/guides/monitor-castlabs-prestoplay-web#mux-environment-key
+        envKey: 'TODO'
+      }
+    }, { containerEl });
+
+    const sourceUrlEl = document.getElementById('sourceUrl');
+
+    document.getElementById('loadButton').addEventListener('click', () => {
+      player.open({
+        source: {
+          url: sourceUrlEl.value,
+          name: defaultSource.name
+        },
+        autoplay: true,
+      });
+    });
+
+    // Expose a helper for manually sending custom Mux events through the
+    // PRESTOplay Mux plugin. This example uses the `hb` event to attach
+    // custom heartbeat metadata without interfering with built-in playback events.
+    // You can call it from the browser console, for example:
+    // emitCustomValueHb('custom_value', 'example')
+    window.emitCustomValueHb = (key, value) => {
+      const mux = player.getPlugin('mux')
+      const metaDataObj = {
+        [key]: value
+      }
+      mux.emit('hb', metaDataObj)
+    }
+
+    player.on('error', event => {
+      const error = event.detail;
+      if (error) {
+        console.warn('Error:', error);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Mux Data analytics</h1>
+    <p class="description">Example of basic DASH playback with Mux Data enabled.</p>
+    <p class="description">Open the browser console and filter for <code>mux</code> to inspect analytics logs.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
+      <button id="loadButton">Load</button>
+    </div>
+  </div>
+</body>
+
+</html>
