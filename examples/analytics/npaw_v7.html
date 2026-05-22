@@ -39,12 +39,11 @@
     const containerEl = videoEl.parentElement;
     const player = new clpp.Player(videoEl, {
       npaw: {
-        // Fill in your accountCode here, https://npaw.com/
+        // Fill in your accountCode here, see more at https://npaw.com/
         accountCode: 'TODO',
         errorFilter: (error) => {
           // A custom function that converts clpp.Error to a NPAW payload.
           // Use this if you are not satisfied with the default error reporting.
-
           const getEnumValueName = (enumObject, value) =>
             Object.keys(enumObject).find((key) => enumObject[key] === value);
 
@@ -56,7 +55,7 @@
             message: error.message,
             severity: error.severity,
             metadata: {
-              // fill in metadata based on opt_data according to your needs
+              // Fill in metadata based on opt_data according to your needs.
             }
           };
         },
