@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Audio player</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .audio-player {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .audio-player button {
+      min-width: 80px;
+    }
+
+    .audio-player .seek {
+      flex: 1;
+    }
+
+    .audio-player .volume {
+      width: 90px;
+    }
+
+    .audio-player input[type="range"] {
+      accent-color: var(--accent);
+    }
+  </style>
+  <!-- mux.js transmuxes the raw AAC segments of this HLS stream for MSE playback. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.hls"
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+    clpp.install(clpp.dash.DashComponent);
+    clpp.install(clpp.hls.HlsComponent);
+
+    // By default, the player wraps the media element in a container and
+    // positions it absolutely. An <audio> element doesn't give that container
+    // a size, so disable the container and keep the element in the layout.
+    const player = new clpp.Player('audio', { }, { disableContainer: true });
+
+    const playButton = document.getElementById('playButton');
+    const seekBar = document.getElementById('seekBar');
+    const timeLabel = document.getElementById('time');
+    const volumeBar = document.getElementById('volumeBar');
+    const muteButton = document.getElementById('muteButton');
+
+    const formatTime = (seconds) =>
+      `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
+
+    document.getElementById('loadButton').addEventListener('click', () => {
+      player.open({
+        source: document.getElementById('sourceUrl').value,
+        autoplay: true,
+      });
+    });
+
+    // Play and pause
+    playButton.addEventListener('click', () => {
+      if (player.isPaused()) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    });
+
+    player.on(clpp.events.STATE_CHANGED, (event) => {
+      const playing = event.detail.currentState === clpp.Player.State.PLAYING;
+      playButton.textContent = playing ? 'Pause' : 'Play';
+    });
+
+    // Seek bar and elapsed time. getSeekRange() also covers live streams.
+    player.on('timeupdate', () => {
+      const {start, end} = player.getSeekRange();
+      seekBar.min = start;
+      seekBar.max = end;
+      seekBar.value = player.getPosition();
+      timeLabel.textContent = `${formatTime(player.getPosition())} / ${formatTime(end)}`;
+    });
+
+    seekBar.addEventListener('change', () => {
+      player.seek(Number(seekBar.value));
+    });
+
+    // Volume and mute
+    volumeBar.addEventListener('input', () => {
+      player.setVolume(Number(volumeBar.value));
+    });
+
+    muteButton.addEventListener('click', () => {
+      player.setMuted(!player.isMuted());
+    });
+
+    player.on('volumechange', () => {
+      volumeBar.value = player.getVolume();
+      muteButton.textContent = player.isMuted() ? 'Unmute' : 'Mute';
+    });
+
+    player.on('error', (event) => {
+      const error = event.detail;
+      if (error) {
+        console.warn('Error:', error);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Audio player</h1>
+    <p class="description">Example of audio-only playback with an <code>&lt;audio&gt;</code> element and custom play, seek, volume, and mute controls.</p>
+    <audio id="audio" crossorigin="anonymous"></audio>
+    <div class="audio-player">
+      <button id="playButton">Play</button>
+      <input id="seekBar" class="seek" type="range" min="0" max="0" step="0.1" value="0" aria-label="Seek">
+      <span id="time">0:00 / 0:00</span>
+      <input id="volumeBar" class="volume" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+      <button id="muteButton">Mute</button>
+    </div>
+    <div class="controls">
+      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/HLS/Non-Muxed/unencrypted/audio/prog_index.m3u8">
+      <button id="loadButton">Load</button>
+    </div>
+  </div>
+</body>
+</html>
