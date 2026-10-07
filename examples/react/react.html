@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
   <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
     .player {
       position: relative;
@@ -54,24 +55,21 @@
         "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
         "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js",
         "react": "https://esm.sh/react@18.3.1",
-        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-        "htm": "https://esm.sh/htm@3.1.1"
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
       }
     }
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
-  <script type="module">
-    // This page runs without a build step, so it uses htm tagged templates
-    // instead of JSX. In a bundled React app, write the same markup as JSX.
+  <!-- This page runs without a build step, so Babel compiles the JSX in the
+       browser. In a real app, your bundler does this instead. -->
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.10/babel.min.js"></script>
+  <script type="text/babel" data-type="module" data-presets="react">
     import React, {useEffect, useRef, useState} from "react"
     import {createRoot} from "react-dom/client"
-    import htm from "htm"
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"
     import "@castlabs/prestoplay/cl.hls"
-
-    const html = htm.bind(React.createElement);
 
     clpp.log.setLogLevel(clpp.log.Level.INFO);
     clpp.install(clpp.dash.DashComponent);
@@ -173,28 +171,28 @@
 
       const sliderValue = seekingTo ?? position;
 
-      return html`
-        <div className="player" ref=${containerRef}>
+      return (
+        <div className="player" ref={containerRef}>
           <div>
-            <video ref=${videoRef} crossOrigin="anonymous" playsInline />
+            <video ref={videoRef} crossOrigin="anonymous" playsInline />
           </div>
           <div className="player-controls">
-            <button onClick=${togglePlay}>${paused ? 'Play' : 'Pause'}</button>
-            <span>${formatTime(sliderValue)}</span>
+            <button onClick={togglePlay}>{paused ? 'Play' : 'Pause'}</button>
+            <span>{formatTime(sliderValue)}</span>
             <input
               type="range"
               aria-label="Seek"
-              min=${seekRange.start}
-              max=${seekRange.end}
+              min={seekRange.start}
+              max={seekRange.end}
               step="0.1"
-              value=${sliderValue}
-              onChange=${seek}
+              value={sliderValue}
+              onChange={seek}
             />
-            <span>${formatTime(seekRange.end)}</span>
-            <button onClick=${toggleFullscreen}>${fullscreen ? 'Exit full' : 'Fullscreen'}</button>
+            <span>{formatTime(seekRange.end)}</span>
+            <button onClick={toggleFullscreen}>{fullscreen ? 'Exit full' : 'Fullscreen'}</button>
           </div>
         </div>
-      `;
+      );
     }
 
     function formatTime (seconds) {
@@ -211,19 +209,21 @@
     function App () {
       const [src, setSrc] = useState(SOURCES[0].url);
 
-      return html`
-        <${Player} config=${{}} src=${src} />
-        <div className="controls">
-          ${SOURCES.map(source => html`
-            <button key=${source.url} onClick=${() => setSrc(source.url)} disabled=${src === source.url}>
-              Load ${source.label}
-            </button>
-          `)}
-        </div>
-      `;
+      return (
+        <>
+          <Player config={{}} src={src} />
+          <div className="controls">
+            {SOURCES.map(source => (
+              <button key={source.url} onClick={() => setSrc(source.url)} disabled={src === source.url}>
+                Load {source.label}
+              </button>
+            ))}
+          </div>
+        </>
+      );
     }
 
-    createRoot(document.getElementById('root')).render(html`<${App} />`);
+    createRoot(document.getElementById('root')).render(<App />);
   </script>
 </head>
 
