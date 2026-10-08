@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>React integration</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    .player {
+      position: relative;
+    }
+
+    .player:fullscreen .clpp-container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    .player-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .player:fullscreen .player-controls {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      color: #fff;
+    }
+
+    .player-controls input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+    }
+
+    .player-controls button {
+      min-width: 90px;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js",
+        "react": "https://esm.sh/react@18.3.1",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <!-- This page runs without a build step, so Babel compiles the JSX in the
+       browser. In a real app, your bundler does this instead. -->
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.10/babel.min.js"></script>
+  <script type="text/babel" data-type="module" data-presets="react">
+    import React, {useEffect, useRef, useState} from "react"
+    import {createRoot} from "react-dom/client"
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.hls"
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+
+    /**
+     * A React video player component backed by PRESTOplay.
+     *
+     * @param {Object} props
+     * @param {Object} props.config The PRESTOplay player configuration.
+     * @param {string} props.src A manifest URL. Changing it loads new content.
+     */
+    function Player ({config, src}) {
+      const containerRef = useRef(null);
+      const videoRef = useRef(null);
+      const playerRef = useRef(null);
+
+      const [paused, setPaused] = useState(true);
+      const [fullscreen, setFullscreen] = useState(false);
+      const [seekRange, setSeekRange] = useState({start: 0, end: 0});
+      const [position, setPosition] = useState(0);
+      // Seeking is asynchronous. While a seek is pending, show the target
+      // position so the slider doesn't jump back for a moment.
+      const [seekingTo, setSeekingTo] = useState(null);
+
+      // Create the player on mount and destroy it on unmount. The player
+      // configuration is read once; pass a new `key` to recreate the player.
+      useEffect(() => {
+        const player = new clpp.Player(videoRef.current, config, {
+          containerEl: videoRef.current.parentElement,
+        });
+        playerRef.current = player;
+
+        player.on(clpp.events.STATE_CHANGED, (event) => {
+          switch (event.detail.currentState) {
+            case clpp.Player.State.PLAYING:
+              setPaused(false);
+              break;
+            case clpp.Player.State.PAUSED:
+            case clpp.Player.State.ENDED:
+              setPaused(true);
+              break;
+          }
+        });
+
+        player.on('timeupdate', () => {
+          // getSeekRange() also covers live content, where the range moves.
+          const range = player.getSeekRange();
+          setSeekRange({start: range.start, end: range.end});
+          setPosition(player.getPosition());
+        });
+
+        player.on('seeked', () => setSeekingTo(null));
+
+        return () => {
+          playerRef.current = null;
+          player.destroy();
+        };
+      }, []);
+
+      // Load content whenever the `src` prop changes.
+      useEffect(() => {
+        if (src) {
+          playerRef.current.open({source: src, autoplay: true})
+            .catch(error => console.warn('Error:', error));
+        }
+      }, [src]);
+
+      // Track whether this component is the fullscreen element.
+      useEffect(() => {
+        const onFullscreenChange = () => {
+          setFullscreen(document.fullscreenElement === containerRef.current);
+        };
+        document.addEventListener('fullscreenchange', onFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+      }, []);
+
+      const togglePlay = () => {
+        if (paused) {
+          playerRef.current.play();
+        } else {
+          playerRef.current.pause();
+        }
+      };
+
+      const toggleFullscreen = () => {
+        if (fullscreen) {
+          document.exitFullscreen();
+        } else {
+          containerRef.current.requestFullscreen();
+        }
+      };
+
+      const seek = (event) => {
+        const time = Number(event.target.value);
+        setSeekingTo(time);
+        playerRef.current.seek(time);
+      };
+
+      const sliderValue = seekingTo ?? position;
+
+      return (
+        <div className="player" ref={containerRef}>
+          <div>
+            <video ref={videoRef} crossOrigin="anonymous" playsInline />
+          </div>
+          <div className="player-controls">
+            <button onClick={togglePlay}>{paused ? 'Play' : 'Pause'}</button>
+            <span>{formatTime(sliderValue)}</span>
+            <input
+              type="range"
+              aria-label="Seek"
+              min={seekRange.start}
+              max={seekRange.end}
+              step="0.1"
+              value={sliderValue}
+              onChange={seek}
+            />
+            <span>{formatTime(seekRange.end)}</span>
+            <button onClick={toggleFullscreen}>{fullscreen ? 'Exit full' : 'Fullscreen'}</button>
+          </div>
+        </div>
+      );
+    }
+
+    function formatTime (seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    const SOURCES = [
+      {label: 'DASH', url: 'https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd'},
+      {label: 'HLS', url: 'https://demo.cf.castlabs.com/media/prestohls/master.m3u8'},
+    ];
+
+    function App () {
+      const [src, setSrc] = useState(SOURCES[0].url);
+
+      return (
+        <>
+          <Player config={{}} src={src} />
+          <div className="controls">
+            {SOURCES.map(source => (
+              <button key={source.url} onClick={() => setSrc(source.url)} disabled={src === source.url}>
+                Load {source.label}
+              </button>
+            ))}
+          </div>
+        </>
+      );
+    }
+
+    createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>React integration</h1>
+    <p class="description">Example of a React player component with play and pause, a seek bar that also supports live content, fullscreen, and loading new content through props.</p>
+    <div id="root"></div>
+  </div>
+</body>
+</html>

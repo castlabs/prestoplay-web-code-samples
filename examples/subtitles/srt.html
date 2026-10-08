@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Subtitle text styling</title>
+  <title>SRT subtitles</title>
   <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +14,8 @@
         "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
         "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
         "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
-        "@castlabs/prestoplay/cl.ttml": "../../node_modules/@castlabs/prestoplay/cl.ttml.js"
+        "@castlabs/prestoplay/cl.vtt": "../../node_modules/@castlabs/prestoplay/cl.vtt.js",
+        "@castlabs/prestoplay/cl.htmlcue": "../../node_modules/@castlabs/prestoplay/cl.htmlcue.js"
       }
     }
   </script>
@@ -23,7 +24,10 @@
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"
-    import "@castlabs/prestoplay/cl.ttml"
+    // The VTT module parses WebVTT and SubRip (SRT) subtitles.
+    import "@castlabs/prestoplay/cl.vtt"
+    // The HTML text displayer renders cues consistently across browsers.
+    import "@castlabs/prestoplay/cl.htmlcue"
 
     clpp.log.setLogLevel(clpp.log.Level.INFO);
 
@@ -46,17 +50,20 @@
 
     player.open({
       source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
-      autoplay: false,
-      startTime: 27,
-      preferredTextLanguage: 'en',
-      textStyle: {
-        backgroundColor: 'rgba(207, 0, 15, 0.75)',
-        windowColor: 'yellow',
-        fontFamily: 'monospace',
-        fontColor: 'green',
-        fontSize: '1em',
-        edgeType: clpp.text.EdgeType.DROP_SHADOW
-      }
+      startTime: 23,
+      // Side-load the SRT file. The mimeType selects the SRT parser; the
+      // player converts the cues to WebVTT internally.
+      remoteTextTracks: [
+        {
+          url: 'https://demo.cf.castlabs.com/media/TOS/TOS-ml.srt',
+          mimeType: 'text/srt',
+          kind: 'subtitles',
+          language: 'mal',
+          label: 'Malayalam',
+        },
+      ],
+      // Select the side-loaded track when playback starts.
+      preferredTextLanguage: 'mal',
     });
   </script>
 </head>
@@ -64,13 +71,13 @@
 <body>
   <prestoplay-header back-href="../../index.html"></prestoplay-header>
   <div class="page">
-    <h1>Subtitle text styling</h1>
-    <p class="description">Configure green subtitle text in monospace font with a shadow.</p>
+    <h1>SRT subtitles</h1>
+    <p class="description">Example of DASH playback with side-loaded SubRip (SRT) subtitles in Malayalam.</p>
     <div>
       <video id="video" controls crossorigin="anonymous" playsinline></video>
     </div>
     <div class="controls">
-      <button data-seek="27">Seek to 0:27</button>
+      <button data-seek="23">Seek to 0:23</button>
       <button data-seek="194">Seek to 3:14</button>
       <button data-seek="340">Seek to 5:40</button>
     </div>

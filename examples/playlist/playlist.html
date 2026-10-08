@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Playlist</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    .playlist {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+      counter-reset: item;
+    }
+
+    .playlist li {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .playlist li:last-child {
+      border-bottom: none;
+    }
+
+    .playlist li::before {
+      counter-increment: item;
+      content: counter(item);
+      color: var(--muted);
+      min-width: 1em;
+    }
+
+    .playlist li:hover {
+      background: var(--bg);
+    }
+
+    .playlist li.active {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .playlist .desc {
+      color: var(--muted);
+      font-weight: 400;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js",
+        "@castlabs/prestoplay/cl.playlist": "../../node_modules/@castlabs/prestoplay/cl.playlist.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module">
+    import {clpp} from "@castlabs/prestoplay"
+    import "@castlabs/prestoplay/cl.mse"
+    import "@castlabs/prestoplay/cl.dash"
+    import "@castlabs/prestoplay/cl.hls"
+    import "@castlabs/prestoplay/cl.playlist"
+
+    clpp.log.setLogLevel(clpp.log.Level.INFO);
+
+    const videoEl = document.getElementById('video');
+    const containerEl = videoEl.parentElement;
+    const player = new clpp.Player(videoEl, { }, { containerEl });
+
+    // A playlist plays its items back-to-back and can mix stream formats.
+    const playlist = new clpp.Playlist(player);
+
+    playlist.append({
+      title: 'PRESTOplay demo',
+      description: 'DASH',
+      configuration: {
+        source: 'https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd',
+        autoplay: true,
+      },
+    });
+    playlist.append({
+      title: 'PRESTOplay demo',
+      description: 'HLS',
+      configuration: {
+        source: 'https://demo.cf.castlabs.com/media/prestohls/master.m3u8',
+        autoplay: true,
+      },
+    });
+    playlist.append({
+      title: 'Tears of Steel',
+      description: 'DASH, 1080p',
+      configuration: {
+        source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
+        autoplay: true,
+      },
+    });
+
+    // Render the queue and let viewers jump to any item.
+    const listEl = document.getElementById('playlist');
+
+    function render () {
+      const position = playlist.getPosition();
+      listEl.replaceChildren(...playlist.getQueue().map((item, index) => {
+        const li = document.createElement('li');
+        li.classList.toggle('active', index === position);
+        li.innerHTML = `<span>${item.title} <span class="desc">— ${item.description}</span></span>`;
+        li.addEventListener('click', () => playlist.goTo(index));
+        return li;
+      }));
+    }
+
+    // The active item changed, either automatically at the end of an item or
+    // through next(), previous(), or goTo().
+    playlist.on(clpp.events.PLAYLIST_ITEM_CHANGED, render);
+    // An item was added, removed, or reordered.
+    playlist.on(clpp.events.PLAYLIST_MODIFIED, render);
+
+    document.getElementById('previousButton').addEventListener('click', () => playlist.previous());
+    document.getElementById('nextButton').addEventListener('click', () => playlist.next());
+
+    // Load the first item and switch to the next one when each item ends.
+    playlist.start();
+    render();
+
+    player.on('error', (event) => {
+      const error = event.detail;
+      if (error) {
+        console.warn('Error:', error);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Playlist</h1>
+    <p class="description">Example of sequential playback of multiple DASH and HLS items with the playlist plugin.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <button id="previousButton">Previous</button>
+      <button id="nextButton">Next</button>
+    </div>
+    <ul id="playlist" class="playlist"></ul>
+  </div>
+</body>
+</html>
