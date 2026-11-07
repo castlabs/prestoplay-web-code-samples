@@ -64,6 +64,16 @@
        browser. In a real app, your bundler does this instead. -->
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.10/babel.min.js"></script>
   <script type="text/babel" data-type="module" data-presets="react">
+    /**
+     * React integration: a <Player> component with custom controls.
+     * Modules: cl.mse, cl.dash, cl.hls
+     * External: react, react-dom, mux.js (HLS); Babel standalone only because this
+     *   page has no build step
+     * APIs: new clpp.Player(), player.open(), player.destroy(), clpp.events.STATE_CHANGED,
+     *   player.getSeekRange(), player.getPosition(), player.seek(), play(), pause()
+     * Gotchas: create the player once in useEffect and destroy it in the cleanup
+     *   function; load new content with open() in a separate effect keyed on src.
+     */
     import React, {useEffect, useRef, useState} from "react"
     import {createRoot} from "react-dom/client"
     import {clpp} from "@castlabs/prestoplay"

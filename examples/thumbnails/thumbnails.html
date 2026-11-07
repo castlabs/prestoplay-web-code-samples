@@ -21,6 +21,14 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Thumbnails: seek-bar preview thumbnails for a DASH stream.
+     * Modules: cl.mse, cl.dash, cl.thumbnails
+     * APIs: player.getPlugin(clpp.thumbnails.ThumbnailsPlugin.Id), plugin.get(time),
+     *   thumb.load(), thumb.element(width)
+     * Gotchas: the stream must provide thumbnails (e.g. DASH image adaptation sets);
+     *   plugin.get() rejects when none is available, so handle the error.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

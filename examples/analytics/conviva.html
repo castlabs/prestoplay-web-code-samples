@@ -26,6 +26,17 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Conviva analytics: DASH playback reported to Conviva.
+     * Modules: cl.mse, cl.dash, cl.conviva
+     * External: Conviva Core SDK >= 4.0.3 (global script; provided by Conviva, not
+     *   on npm)
+     * APIs: player config `conviva: {customerKey, serviceUrl, viewerId, playerName,
+     *   customTags, enableAdInsights}`, open({source: {url, type, name}})
+     * Gotchas: customerKey and serviceUrl are TODO placeholders; serviceUrl is the
+     *   test gateway and is omitted in production; source.name is reported as the
+     *   asset name.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

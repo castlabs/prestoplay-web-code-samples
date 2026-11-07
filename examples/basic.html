@@ -21,6 +21,12 @@
   </script>
   <script type="module" src="./components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Basic playback: load and play a DASH or HLS stream.
+     * Modules: cl.mse, cl.dash, cl.hls
+     * External: mux.js (global script, needed for HLS transmuxing)
+     * APIs: new clpp.Player(), player.open({source, autoplay}), player.on('error')
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

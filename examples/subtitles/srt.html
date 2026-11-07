@@ -21,6 +21,15 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * SRT subtitles: side-load a SubRip file for a DASH stream.
+     * Modules: cl.mse, cl.dash, cl.vtt (parses WebVTT and SRT), cl.htmlcue (HTML
+     *   subtitle renderer)
+     * APIs: player.open({remoteTextTracks: [{url, mimeType: 'text/srt', kind,
+     *   language, label}], preferredTextLanguage})
+     * Gotchas: mimeType selects the parser; set preferredTextLanguage to the
+     *   track's language to show it on start.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

@@ -1,0 +1,65 @@
+# PRESTOplay Web Code Samples
+
+> Runnable code samples for PRESTOplay for Web Apps (npm: `@castlabs/prestoplay`),
+> castLabs' browser video player SDK for DASH and HLS. Each sample is a single
+> self-contained HTML file. The PRESTOplay code is in the
+> `<script type="module">` block in `<head>`. Each block starts with a comment
+> listing the modules, external dependencies, APIs and gotchas for that sample.
+
+The rest of each HTML file is page scaffolding and is not needed in an app: the
+import map, the `<prestoplay-header>` component, `examples/styles.css`, and the
+inline styles.
+
+## Core concepts
+
+- The SDK is split into modules. `@castlabs/prestoplay` (`cl.core.js`) exports
+  the `clpp` namespace. Feature modules are imported only for their side
+  effects, before a player is created:
+  `import "@castlabs/prestoplay/cl.mse"`.
+- `cl.mse` provides playback through Media Source Extensions and is needed by
+  every sample. Add `cl.dash` for DASH and `cl.hls` for HLS.
+- Each feature has its own module: `cl.playlist`, `cl.thumbnails`, `cl.ima`
+  (Google IMA ads), `cl.vtt` (WebVTT and SRT subtitles), `cl.ttml` (TTML
+  subtitles), `cl.htmlcue` (HTML subtitle renderer), `cl.conviva`,
+  `cl.muxdata` and `cl.youbora` (NPAW).
+- The samples load the SDK through an import map that points at files in
+  `node_modules`. In an app that uses a bundler, import the same specifiers
+  directly; there is no import map.
+- Include `@castlabs/prestoplay/clpp.styles.css` for the player UI styles.
+- HLS samples load `mux.js` as a global `<script>` before the SDK. It
+  transmuxes MPEG-TS and raw AAC segments for MSE playback.
+- Creating a player:
+  `new clpp.Player(videoElOrId, playerConfig, {containerEl})`. Plugin settings
+  go in `playerConfig` (e.g. `{conviva: {...}}`). Per-content settings go in
+  `player.open({source, autoplay, ...})`, which returns a Promise.
+- Errors: listen with `player.on('error', e => e.detail)`, and handle the
+  Promise returned by `player.open()` as well.
+- Cleanup: call `player.destroy()` when the player is no longer needed. See
+  the React sample.
+- Plugins: get one with `player.getPlugin(id)`. Register custom plugins with
+  `clpp.Player.registerPlugin(factory)` before creating the player.
+- Values marked `TODO` (account keys, vendor SDK paths) must be filled in
+  before a sample works.
+
+## Examples
+
+- [Basic playback](examples/basic.html): Load and play a DASH or HLS URL. This is the minimal setup.
+- [React integration](examples/react/react.html): A React `Player` component with custom play/pause, a seek bar and fullscreen. Creates the player in `useEffect` and destroys it in the cleanup function.
+- [Playlist](examples/playlist/playlist.html): `clpp.Playlist` plays DASH and HLS items back-to-back with `next()`, `previous()` and `goTo()`.
+- [Custom plugin](examples/plugins/stats_overlay.html): Implements `clpp.PlayerPlugin` and `clpp.PlayerPluginFactory` (a stats overlay) and shows each plugin lifecycle callback.
+- [Google IMA ads](examples/advertising/ima.html): Client-side pre-, mid- and post-roll ads from a VMAP ad tag, with ad events and the `clpp.ads.IAd` interface.
+- [Thumbnails](examples/thumbnails/thumbnails.html): Seek-bar preview thumbnails for a DASH stream through the thumbnails plugin.
+- [Subtitle text styling](examples/subtitles/text_style.html): Style subtitles with the `textStyle` setting (font, colors, edge type).
+- [SRT subtitles](examples/subtitles/srt.html): Side-load an SRT file with `remoteTextTracks` and select it with `preferredTextLanguage`.
+- [Conviva analytics](examples/analytics/conviva.html): Conviva integration through the `conviva` player config. The vendor SDK is not on npm.
+- [Mux Data analytics](examples/analytics/muxdata.html): Mux Data integration through the `muxdata` player config, plus custom events.
+- [NPAW v7 analytics](examples/analytics/npaw_v7.html): NPAW (Youbora) integration through the `npaw` player config, with a custom `errorFilter`.
+- [Audio player](examples/audio/audio.html): Audio-only HLS in an `<audio>` element with `disableContainer: true` and custom controls.
+
+## Documentation
+
+- [API reference](https://players.castlabs.com/web/latest/docs/api)
+- [Manual](https://docs.castlabs.com/prestoplay/web/)
+- [npm package](https://www.npmjs.com/package/@castlabs/prestoplay)
+- [Demo page](https://demo.castlabs.com/)
+- [Product page](https://castlabs.com/playback/prestoplay/browsers/)

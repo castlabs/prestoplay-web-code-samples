@@ -69,6 +69,16 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Playlist: play DASH and HLS items back-to-back.
+     * Modules: cl.mse, cl.dash, cl.hls, cl.playlist
+     * External: mux.js (HLS)
+     * APIs: new clpp.Playlist(player), append({title, description, configuration}),
+     *   start(), next(), previous(), goTo(), getQueue(), getPosition(),
+     *   clpp.events.PLAYLIST_ITEM_CHANGED, clpp.events.PLAYLIST_MODIFIED
+     * Gotchas: each item's `configuration` is what player.open() would receive;
+     *   call playlist.start() instead of player.open().
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"
