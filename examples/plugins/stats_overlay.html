@@ -66,6 +66,17 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Custom plugin: a stats overlay that shows the plugin lifecycle.
+     * Modules: cl.mse, cl.dash, cl.hls
+     * External: mux.js (HLS)
+     * APIs: clpp.PlayerPlugin (id, onPlayerCreated, onContentWillLoad,
+     *   onContentLoaded, onPlayerWillRelease, onPlayerWillDestroy),
+     *   clpp.PlayerPluginFactory (create), clpp.Player.registerPlugin(),
+     *   player.getPlugin(id)
+     * Gotchas: register the factory before creating the player; remove listeners
+     *   added in onContentWillLoad in onPlayerWillRelease.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

@@ -22,6 +22,16 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * NPAW v7 analytics: DASH playback reported to NPAW (Youbora).
+     * Modules: cl.mse, cl.dash, cl.youbora
+     * External: NPAW plugin 7.x (NpawPlugin-es5.js and NpawPluginAdapters-es5.js,
+     *   global scripts)
+     * APIs: player config `npaw: {accountCode, errorFilter}`, clpp.Error,
+     *   player.onError() (used here to simulate errors)
+     * Gotchas: the module is cl.youbora but the config key is `npaw`; accountCode
+     *   is a TODO placeholder.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

@@ -52,6 +52,15 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Google IMA ads: client-side pre-, mid- and post-roll ads from a VMAP tag.
+     * Modules: cl.mse, cl.dash, cl.ima
+     * External: Google IMA SDK (ima3.js, global script, load before the SDK)
+     * APIs: player.open({ima: {adTagUrl}}), clpp.events.ADS_TIMELINE_CHANGED,
+     *   clpp.events.AD_* events, clpp.ads.IAd, clpp.ads.PodType
+     * Gotchas: the ad tag goes in open(), not in the player config; the correlator
+     *   must be unique per ad request; ad blockers stop the IMA SDK from loading.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"

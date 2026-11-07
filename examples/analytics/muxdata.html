@@ -21,6 +21,15 @@
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
   <script type="module">
+    /**
+     * Mux Data analytics: DASH playback reported to Mux Data.
+     * Modules: cl.mse, cl.dash, cl.muxdata
+     * External: Mux core SDK (https://src.litix.io/core/4/mux.js, global script)
+     * APIs: player config `muxdata: {envKey, muxOptionsOverride}`,
+     *   player.getPlugin('mux').emit(eventName, data)
+     * Gotchas: envKey is a TODO placeholder; this mux.js is Mux Data, not the
+     *   mux.js transmuxer used for HLS.
+     */
     import {clpp} from "@castlabs/prestoplay"
     import "@castlabs/prestoplay/cl.mse"
     import "@castlabs/prestoplay/cl.dash"
