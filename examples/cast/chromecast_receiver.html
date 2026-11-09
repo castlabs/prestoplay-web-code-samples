@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Chromecast receiver</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* On the Cast device, the cast-media-player fills the screen. */
+    cast-media-player {
+      position: fixed;
+      inset: 0;
+    }
+
+    #notCastDevice:not([hidden]) ~ cast-media-player {
+      display: none;
+    }
+  </style>
+  <!-- The Google Cast Web Receiver SDK (CAF). -->
+  <script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.cast": "../../node_modules/@castlabs/prestoplay/cl.cast.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./chromecast_receiver.js"></script>
+</head>
+
+<body>
+  <!-- Shown only outside a Cast device. -->
+  <div id="notCastDevice">
+    <prestoplay-header back-href="../../index.html"></prestoplay-header>
+    <div class="page">
+      <h1>Chromecast receiver</h1>
+      <p class="description">Example of a custom Chromecast Web Receiver app built with PRESTOplay. It runs on the Cast device, not in this browser. Host this page on HTTPS, register its URL in the Google Cast SDK Developer Console, and use the receiver app ID with the <a href="./chromecast_sender.html">Chromecast sender</a> sample.</p>
+    </div>
+  </div>
+  <!-- The Cast framework's built-in media player and UI. -->
+  <cast-media-player id="castPlayer"></cast-media-player>
+</body>
+</html>

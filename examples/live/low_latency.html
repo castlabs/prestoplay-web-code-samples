@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Low-latency live</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .stats {
+      margin: 20px 0 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .stat {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font: 600 1.2rem ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./low_latency.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Low-latency live</h1>
+    <p class="description">Example of live DASH playback close to the live edge, with live edge chasing and a latency readout.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Latency</div><div class="stat-value" id="latency">--</div></div>
+      <div class="stat"><div class="stat-label">Buffer ahead</div><div class="stat-value" id="bufferAhead">--</div></div>
+      <div class="stat"><div class="stat-label">Playback rate</div><div class="stat-value" id="playbackRate">--</div></div>
+    </div>
+    <div class="controls">
+      <button id="liveEdgeButton">Go to live edge</button>
+    </div>
+  </div>
+</body>
+</html>

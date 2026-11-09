@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Live delay</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    select {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .stats {
+      margin: 20px 0 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .stat {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font: 600 1.2rem ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./live_delay.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Live delay</h1>
+    <p class="description">Example of controlling how far behind the live edge a live stream plays. Once the buffer is full, the buffer ahead is the delay behind the live edge. The latency to the device clock also includes the encoding delay of the stream.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <select id="presetSelect">
+        <option value="dash_delay_60">DASH: suggestedPresentationDelay 60 s</option>
+        <option value="dash_low_latency">DASH: lowLatencyMode</option>
+        <option value="hls_default">HLS: delay from the stream</option>
+        <option value="hls_delay_60">HLS: suggestedPresentationDelay 60 s</option>
+      </select>
+      <button id="loadButton">Load</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Target delay</div><div class="stat-value" id="expected">--</div></div>
+      <div class="stat"><div class="stat-label">Latency to device clock</div><div class="stat-value" id="latency">--</div></div>
+      <div class="stat"><div class="stat-label">Buffer ahead (delay)</div><div class="stat-value" id="bufferAhead">--</div></div>
+    </div>
+  </div>
+</body>
+</html>

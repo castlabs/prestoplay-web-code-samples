@@ -1,14 +1,17 @@
 # PRESTOplay Web Code Samples
 
 > Runnable code samples for PRESTOplay for Web Apps (npm: `@castlabs/prestoplay`),
-> castLabs' browser video player SDK for DASH and HLS. Each sample is a single
-> self-contained HTML file. The PRESTOplay code is in the
-> `<script type="module">` block in `<head>`. Each block starts with a comment
-> listing the modules, external dependencies, APIs and gotchas for that sample.
+> castLabs' browser video player SDK for DASH and HLS. The PRESTOplay code of
+> each sample is in a JavaScript module (`examples/**/<name>.js`). Each module
+> starts with a comment listing the modules, external dependencies, APIs and
+> gotchas for that sample, and the element IDs it expects from its page.
 
-The rest of each HTML file is page scaffolding and is not needed in an app: the
-import map, the `<prestoplay-header>` component, `examples/styles.css`, and the
-inline styles.
+Each module runs in an HTML page with the same name next to it
+(`<name>.html`). The page is scaffolding and is not needed in an app: the
+import map, external `<script>` tags (e.g. mux.js or vendor SDKs, listed as
+`External` in the module comment), the `<prestoplay-header>` component,
+`examples/styles.css`, the inline styles and the markup. The React sample is
+the exception: its code is inline in `examples/react/react.html`.
 
 ## Core concepts
 
@@ -20,8 +23,9 @@ inline styles.
   every sample. Add `cl.dash` for DASH and `cl.hls` for HLS.
 - Each feature has its own module: `cl.playlist`, `cl.thumbnails`, `cl.ima`
   (Google IMA ads), `cl.vtt` (WebVTT and SRT subtitles), `cl.ttml` (TTML
-  subtitles), `cl.htmlcue` (HTML subtitle renderer), `cl.conviva`,
-  `cl.muxdata` and `cl.youbora` (NPAW).
+  subtitles), `cl.htmlcue` (HTML subtitle renderer), `cl.persistent` (stored
+  DRM licenses, with `cl.crypto`), `cl.cast` (Chromecast sender and receiver),
+  `cl.airplay`, `cl.conviva`, `cl.muxdata` and `cl.youbora` (NPAW).
 - The samples load the SDK through an import map that points at files in
   `node_modules`. In an app that uses a bundler, import the same specifiers
   directly; there is no import map.
@@ -36,6 +40,15 @@ inline styles.
   Promise returned by `player.open()` as well.
 - Cleanup: call `player.destroy()` when the player is no longer needed. See
   the React sample.
+- DRM: set `drm: {env, customData}` in `player.open()`. `env` is
+  `'DRMtoday'`, `'DRMtoday_STAGING'`, `'DRMtoday_DEMO'`, `'HeaderDrm'` (any
+  license server that authorizes with HTTP headers) or a custom environment.
+  DRM needs a secure context (HTTPS or localhost).
+- Networking: `player.getNetworkEngine()` returns the network engine. Use
+  `addRequestModifier` and `addResponseModifier` to change requests and
+  responses, with `clpp.net.RequestType` to tell them apart. An async modifier
+  must resolve with the request or response object. Modifiers stay registered
+  after `player.release()`. Native HLS on Safari bypasses them.
 - Plugins: get one with `player.getPlugin(id)`. Register custom plugins with
   `clpp.Player.registerPlugin(factory)` before creating the player.
 - Values marked `TODO` (account keys, vendor SDK paths) must be filled in
@@ -43,18 +56,39 @@ inline styles.
 
 ## Examples
 
-- [Basic playback](examples/basic.html): Load and play a DASH or HLS URL. This is the minimal setup.
+- [Basic playback](examples/basic.js): Load and play a DASH or HLS URL. This is the minimal setup.
 - [React integration](examples/react/react.html): A React `Player` component with custom play/pause, a seek bar and fullscreen. Creates the player in `useEffect` and destroys it in the cleanup function.
-- [Playlist](examples/playlist/playlist.html): `clpp.Playlist` plays DASH and HLS items back-to-back with `next()`, `previous()` and `goTo()`.
-- [Custom plugin](examples/plugins/stats_overlay.html): Implements `clpp.PlayerPlugin` and `clpp.PlayerPluginFactory` (a stats overlay) and shows each plugin lifecycle callback.
-- [Google IMA ads](examples/advertising/ima.html): Client-side pre-, mid- and post-roll ads from a VMAP ad tag, with ad events and the `clpp.ads.IAd` interface.
-- [Thumbnails](examples/thumbnails/thumbnails.html): Seek-bar preview thumbnails for a DASH stream through the thumbnails plugin.
-- [Subtitle text styling](examples/subtitles/text_style.html): Style subtitles with the `textStyle` setting (font, colors, edge type).
-- [SRT subtitles](examples/subtitles/srt.html): Side-load an SRT file with `remoteTextTracks` and select it with `preferredTextLanguage`.
-- [Conviva analytics](examples/analytics/conviva.html): Conviva integration through the `conviva` player config. The vendor SDK is not on npm.
-- [Mux Data analytics](examples/analytics/muxdata.html): Mux Data integration through the `muxdata` player config, plus custom events.
-- [NPAW v7 analytics](examples/analytics/npaw_v7.html): NPAW (Youbora) integration through the `npaw` player config, with a custom `errorFilter`.
-- [Audio player](examples/audio/audio.html): Audio-only HLS in an `<audio>` element with `disableContainer: true` and custom controls.
+- [Playlist](examples/playlist/playlist.js): `clpp.Playlist` plays DASH and HLS items back-to-back with `next()`, `previous()` and `goTo()`.
+- [Custom plugin](examples/plugins/stats_overlay.js): Implements `clpp.PlayerPlugin` and `clpp.PlayerPluginFactory` (a stats overlay) and shows each plugin lifecycle callback.
+- [Google IMA ads](examples/advertising/ima.js): Client-side pre-, mid- and post-roll ads from a VMAP ad tag, with ad events and the `clpp.ads.IAd` interface.
+- [Thumbnails](examples/thumbnails/thumbnails.js): Seek-bar preview thumbnails for a DASH stream through the thumbnails plugin.
+- [Subtitle text styling](examples/subtitles/text_style.js): Style subtitles with the `textStyle` setting (font, colors, edge type).
+- [SRT subtitles](examples/subtitles/srt.js): Side-load an SRT file with `remoteTextTracks` and select it with `preferredTextLanguage`.
+- [Conviva analytics](examples/analytics/conviva.js): Conviva integration through the `conviva` player config. The vendor SDK is not on npm.
+- [Mux Data analytics](examples/analytics/muxdata.js): Mux Data integration through the `muxdata` player config, plus custom events.
+- [NPAW v7 analytics](examples/analytics/npaw_v7.js): NPAW (Youbora) integration through the `npaw` player config, with a custom `errorFilter`.
+- [DRMtoday playback](examples/drm/drmtoday.js): DRM-protected DASH from DRMtoday with `drm: {env, customData}`, plus the `DRM_SESSION_CREATED` and `DRM_LICENSE_REQUESTED` events.
+- [Custom license server](examples/drm/header_drm.js): The `HeaderDrm` environment with Widevine, PlayReady and FairPlay license URLs, the FairPlay certificate and custom request headers.
+- [Persistent license](examples/drm/persistent_license.js): Store a license with `drm.offlineId`, the `DRM_SESSION_PERSISTED` event and `clpp.persistent.removeLicense()`.
+- [WebVTT and TTML subtitles](examples/subtitles/sidecar.js): Side-load WebVTT and TTML files for DASH and HLS with `remoteTextTracks`.
+- [Low-latency live](examples/live/low_latency.js): `lowLatencyMode`, live edge chasing in `streaming`, `manifest.clockSyncUri`, and a latency readout from `getPresentationStartTime()`.
+- [Live delay](examples/live/live_delay.js): `suggestedPresentationDelay` and the buffering goals for live DASH and HLS, compared with the delay set by the stream.
+- [Request and response modifiers](examples/network/request_modifiers.js): An async auth header, a segment query parameter, a manifest rewrite and a response log through the network engine.
+- [CMCD](examples/network/cmcd.js): Common Media Client Data through the `cmcd` config, with the data sent shown for each request.
+- [Timeline cues](examples/events/timeline_cues.js): `TIMELINE_CUE_ADDED`/`ENTER`/`EXIT` and `getTimelineCues()` for SCTE-35 events in a DASH MPD and HLS `EXT-X-DATERANGE` tags.
+- [Chromecast sender](examples/cast/chromecast_sender.js): `cl.cast` with `clpp.cast.onReady`, `CastProxy`, the cast status events and custom receiver messages. Needs a receiver app ID.
+- [AirPlay](examples/cast/airplay.js): The AirPlay plugin's device menu and events, with native HLS on Safari, plus `setDrmCustomDataModifier` for single-use DRM tokens.
+- [Audio player](examples/audio/audio.js): Audio-only HLS in an `<audio>` element with `disableContainer: true` and custom controls.
+- [Player configuration](examples/player/configuration.js): `autoplay`, `muted`, `volume`, `startTime`, `streaming` buffering goals and `attemptParameters` for segments and manifests, the `AUTOPLAY_NOT_ALLOWED` event and the rejected `open()` when the browser blocks autoplay.
+- [Player surface](examples/player/surface.js): An explicit `containerEl`, `player.getSurface()` with `addElementToContainer()`/`removeElementFromContainer()` for an overlay, `.clpp-container`/`.clpp-video` style overrides, and the `disableContainer` trade-offs.
+- [Smart TV](examples/player/smart_tv.js): `pauseWhenInBackground` or release/reopen on `visibilitychange`, the polyfill script, low `bufferBehind` and `restrictions.maxHeight`, and remote keys (`tizen.tvinputdevice.registerKey()`, Tizen/webOS key codes). Runs in a desktop browser too.
+- [Player events](examples/events/player_events.js): `player.on()`, `one()` and `off()` with HTML5 media events and `clpp.events` (`STATE_CHANGED`, `BUFFERING_STARTED`/`ENDED`, `TRACKS_ADDED`, `*_TRACK_CHANGED`, `BITRATE_CHANGED`, `RELEASING`).
+- [Error handling](examples/events/errors.js): `clpp.events.ERROR` and the `player.open()` rejection, `clpp.Error` category/severity/code, `error.data.request` retry attempts and `manifest.attemptParameters`, for HTTP 404, an unreachable host and an invalid manifest.
+- [Audio and subtitle tracks](examples/tracks/tracks.js): `preferredAudioLanguage`/`preferredTextLanguage` with fallback arrays, and `player.getTrackManager()` to list and switch audio and text tracks (`setTextTrack(null)` turns subtitles off) and to lock a video rendition (`setVideoRendition(null)` turns ABR back on).
+- [Custom DRM environment](examples/drm/license_modifiers.js): `clpp.drm.DrmEnvironment`, `setDrmSystem` and `registerDrmEnvironment`, with an async `licenseRequest` modifier that adds an auth header, a `licenseResponse` modifier that unwraps a JSON-wrapped Widevine license, `sessionContext.customData`, and a second FairPlay environment with `extractContentId`.
+- [Fast channel zapping](examples/live/fast_zapping.js): Experimental `clpp.playlist.McPlaylist` with `setItems()`, `setIndex()`, `playFirst()`, `playNext()`, `playPrev()`, the `update` event and fast-switch `streaming` settings (`bufferingGoal`, `startAtSegmentBoundary`, `ignoreDrift`), with a zap time readout.
+- [Seamless playlist](examples/playlist/sc_playlist.js): Experimental `clpp.playlist.ScPlaylist` (extends `clpp.Player`) with `openPlaylist()`, `addItem()`, `seekWith()`, `getTimeline()` windows, `playlist: {timeline, startTime, endTime, cropTimeline}`, the `SC_PLAYLIST_*` events and timeline cues with `configurationId`.
+- [Chromecast receiver](examples/cast/chromecast_receiver.js): A custom Web Receiver app with `clpp.cast.Receiver` (`init`, `setQueue(clpp.cast.createCastQueue())`, `start`, `stop`), `setPlayerConfigInterceptor`, and custom messages on `urn:x-cast:castlabs` that pair with the sender sample. Must be hosted and registered in the Cast console.
 
 ## Documentation
 

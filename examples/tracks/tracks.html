@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Audio and subtitle tracks</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .tracks {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px 12px;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    select {
+      min-width: 0;
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.ttml": "../../node_modules/@castlabs/prestoplay/cl.ttml.js",
+        "@castlabs/prestoplay/cl.htmlcue": "../../node_modules/@castlabs/prestoplay/cl.htmlcue.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./tracks.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Audio and subtitle tracks</h1>
+    <p class="description">Example of initial audio and subtitle language selection with fallbacks, and of switching audio, subtitle, and video quality during playback with the track manager.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <button id="loadButton">Load</button>
+    </div>
+    <div class="tracks">
+      <label for="audioSelect">Audio</label>
+      <select id="audioSelect" disabled></select>
+      <label for="textSelect">Subtitles</label>
+      <select id="textSelect" disabled></select>
+      <label for="videoSelect">Video quality</label>
+      <select id="videoSelect" disabled></select>
+    </div>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>

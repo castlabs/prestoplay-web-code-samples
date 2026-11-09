@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Seamless playlist</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    select {
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .timeline {
+      margin: 20px 0 0;
+      display: flex;
+      gap: 2px;
+      min-height: 32px;
+    }
+
+    .timeline .window {
+      flex-basis: 0;
+      min-width: 0;
+      padding: 6px 8px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--muted);
+    }
+
+    .timeline .window.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .readout {
+      margin: 8px 0 0;
+      font: 0.85rem ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--muted);
+    }
+
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+
+    .log .event {
+      font-weight: 600;
+    }
+
+    .log .detail {
+      color: var(--muted);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./sc_playlist.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Seamless playlist</h1>
+    <p class="description">Example of continuous back-to-back playback of DASH items with the experimental single-controller playlist (<code>ScPlaylist</code>), with timeline windows, timeline modes, cropping, and timeline cues.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div id="timeline" class="timeline"></div>
+    <div class="readout">Item: <span id="item">--</span> · Position: <span id="position">--</span></div>
+    <div class="controls">
+      <button id="backButton">-30 s</button>
+      <button id="forwardButton">+30 s</button>
+      <button id="addButton">Add item</button>
+    </div>
+    <form id="modeForm" class="controls">
+      <label>Timeline
+        <select name="timeline">
+          <option value="basic">basic</option>
+          <option value="flat">flat</option>
+        </select>
+      </label>
+      <label><input type="checkbox" name="crop"> Crop timeline</label>
+      <button type="submit">Reload</button>
+    </form>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>

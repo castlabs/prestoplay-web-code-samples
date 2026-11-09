@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Custom license server</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./header_drm.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Custom license server</h1>
+    <p class="description">Example of DRM playback with a license server that authorizes requests with HTTP headers. Fill in the stream and license server URLs marked with TODO first.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <button id="loadButton">Load</button>
+    </div>
+  </div>
+</body>
+</html>

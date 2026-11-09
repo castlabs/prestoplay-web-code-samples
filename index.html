@@ -42,9 +42,32 @@
       <li><a href="examples/react/react.html">React integration</a> <span class="desc">— React player component with play/pause, seek bar, and fullscreen</span></li>
     </ul>
 
+    <h2>Player</h2>
+    <ul>
+      <li><a href="examples/player/configuration.html">Player configuration</a> <span class="desc">— Autoplay and the browser autoplay policy, start time, volume, buffering goals, and retries</span></li>
+      <li><a href="examples/player/surface.html">Player surface</a> <span class="desc">— Custom container element, an overlay on the video, and style overrides</span></li>
+      <li><a href="examples/player/smart_tv.html">Smart TV</a> <span class="desc">— Suspend and resume handling, a memory-friendly configuration, and remote control keys for Tizen and webOS</span></li>
+    </ul>
+
+    <h2>DRM</h2>
+    <ul>
+      <li><a href="examples/drm/drmtoday.html">DRMtoday playback</a> <span class="desc">— DRM-protected DASH playback with licenses from DRMtoday</span></li>
+      <li><a href="examples/drm/header_drm.html">Custom license server</a> <span class="desc">— Widevine, PlayReady, and FairPlay license servers that authorize requests with HTTP headers</span></li>
+      <li><a href="examples/drm/persistent_license.html">Persistent license</a> <span class="desc">— Store a DRM license on the device, reuse it, and remove it</span></li>
+      <li><a href="examples/drm/license_modifiers.html">Custom DRM environment</a> <span class="desc">— Custom DRM environment with license modifiers that authorize requests and unwrap JSON-wrapped licenses</span></li>
+    </ul>
+
+    <h2>Live</h2>
+    <ul>
+      <li><a href="examples/live/low_latency.html">Low-latency live</a> <span class="desc">— Live DASH playback close to the live edge with live edge chasing</span></li>
+      <li><a href="examples/live/live_delay.html">Live delay</a> <span class="desc">— Control how far behind the live edge DASH and HLS live streams play</span></li>
+      <li><a href="examples/live/fast_zapping.html">Fast channel zapping</a> <span class="desc">— Switch between live channels quickly with the experimental McPlaylist, which preloads the neighboring channels</span></li>
+    </ul>
+
     <h2>Playlist</h2>
     <ul>
       <li><a href="examples/playlist/playlist.html">Playlist</a> <span class="desc">— Play DASH and HLS items back-to-back with previous/next controls</span></li>
+      <li><a href="examples/playlist/sc_playlist.html">Seamless playlist</a> <span class="desc">— Continuous back-to-back playback with the experimental ScPlaylist, with timeline windows, timeline modes, cropping, and cues</span></li>
     </ul>
 
     <h2>Plugins</h2>
@@ -62,10 +85,36 @@
       <li><a href="examples/thumbnails/thumbnails.html">Basic thumbnail rendering</a> <span class="desc">— Retrieve thumbnails for a DASH stream</span></li>
     </ul>
 
+    <h2>Tracks</h2>
+    <ul>
+      <li><a href="examples/tracks/tracks.html">Audio and subtitle tracks</a> <span class="desc">— Initial language selection with fallbacks, and switching audio, subtitles, and video quality</span></li>
+    </ul>
+
     <h2>Subtitles</h2>
     <ul>
       <li><a href="examples/subtitles/text_style.html">Subtitle text styling</a> <span class="desc">— Configure subtitle font, color, background, and edge styling</span></li>
       <li><a href="examples/subtitles/srt.html">SRT subtitles</a> <span class="desc">— Side-load SubRip (SRT) subtitles for a DASH stream</span></li>
+      <li><a href="examples/subtitles/sidecar.html">WebVTT and TTML subtitles</a> <span class="desc">— Side-load WebVTT and TTML subtitles for DASH and HLS streams</span></li>
+    </ul>
+
+    <h2>Networking</h2>
+    <ul>
+      <li><a href="examples/network/request_modifiers.html">Request and response modifiers</a> <span class="desc">— Add auth headers and query parameters, and rewrite the manifest</span></li>
+      <li><a href="examples/network/cmcd.html">CMCD</a> <span class="desc">— Send Common Media Client Data (CMCD) with media requests</span></li>
+    </ul>
+
+    <h2>Events</h2>
+    <ul>
+      <li><a href="examples/events/timeline_cues.html">Timeline cues</a> <span class="desc">— React to SCTE-35 events in a DASH manifest and EXT-X-DATERANGE tags in HLS</span></li>
+      <li><a href="examples/events/player_events.html">Player events</a> <span class="desc">— Log HTML5 media events and PRESTOplay events, listen once, and remove a listener</span></li>
+      <li><a href="examples/events/errors.html">Error handling</a> <span class="desc">— Error event and rejected Promise, error category and severity, and network retry attempts</span></li>
+    </ul>
+
+    <h2>Casting</h2>
+    <ul>
+      <li><a href="examples/cast/chromecast_sender.html">Chromecast sender</a> <span class="desc">— Cast the player content to a Chromecast device and control it</span></li>
+      <li><a href="examples/cast/chromecast_receiver.html">Chromecast receiver</a> <span class="desc">— Custom Web Receiver app with a queue, track info, and custom messages for the sender</span></li>
+      <li><a href="examples/cast/airplay.html">AirPlay</a> <span class="desc">— Play HLS on an AirPlay device from Safari</span></li>
     </ul>
 
     <h2>Analytics</h2>
