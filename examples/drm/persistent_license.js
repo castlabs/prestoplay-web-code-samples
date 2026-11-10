@@ -9,8 +9,8 @@
  *   some key systems and browsers support persistent licenses, e.g.
  *   Widevine on Chrome desktop. offlineId is your own key for the stored
  *   license, usually derived from the content ID.
- * Page: persistent_license.html provides #video, #log, #loadButton,
- *   #removeButton
+ * Page: persistent_license.html provides #video, #log, #loadForm, #sourceUrl,
+ *   #env, #merchant, #userId, #sessionId, #removeButton
  */
 import {clpp} from "@castlabs/prestoplay"
 import "@castlabs/prestoplay/cl.mse"
@@ -50,21 +50,25 @@ player.on('error', (event) => {
   }
 });
 
-document.getElementById('loadButton').addEventListener('click', async () => {
+const value = id => document.getElementById(id).value.trim();
+
+document.getElementById('loadForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
   try {
     await player.open({
-      // TODO: Replace with your DRM-protected stream.
-      source: 'TODO: URL of a DRM-protected DASH stream',
+      // Your stream, protected with keys stored in your DRMtoday account.
+      source: value('sourceUrl'),
       autoplay: true,
       muted: true,
       drm: {
-        env: 'DRMtoday',
-        // TODO: Replace with the DRMtoday custom data of your merchant.
-        // The license policy must allow persistent licenses.
+        // 'DRMtoday' (production) or 'DRMtoday_STAGING'.
+        env: value('env'),
+        // DRMtoday custom data of your merchant. The license policy must
+        // allow persistent licenses.
         customData: {
-          merchant: 'TODO',
-          userId: 'TODO',
-          sessionId: 'TODO',
+          merchant: value('merchant'),
+          userId: value('userId') || undefined,
+          sessionId: value('sessionId') || undefined,
         },
         // Setting offlineId turns on persistent licenses. On the next
         // load with the same offlineId, the player uses the stored

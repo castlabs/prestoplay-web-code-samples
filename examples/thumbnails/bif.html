@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>BIF thumbnails</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./thumbnails.styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.thumbnails": "../../node_modules/@castlabs/prestoplay/cl.thumbnails.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./bif.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>BIF thumbnails</h1>
+    <p class="description">BIF mode: a single binary BIF file, the Roku thumbnail format. Hover over the seek bar to see them.</p>
+    <div class="video-wrapper">
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+      <div id="thumbnailPreview" class="thumbnail-preview" hidden></div>
+    </div>
+  </div>
+</body>
+</html>

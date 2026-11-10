@@ -42,14 +42,19 @@ updated are marked with `TODO`.
 
 - [Player configuration](examples/player/configuration.html) — Autoplay and the browser autoplay policy, start time, volume, buffering goals, and retries
 - [Player surface](examples/player/surface.html) — Custom container element, an overlay on the video, and style overrides
+- [Simple UI](examples/player/simple_ui.html) — Minimal custom UI with a poster image and a big play button
 - [Smart TV](examples/player/smart_tv.html) — Suspend and resume handling, a memory-friendly configuration, and remote control keys for Tizen and webOS
 
 ### DRM
 
 - [DRMtoday playback](examples/drm/drmtoday.html) — DRM-protected DASH playback with licenses from DRMtoday
+- [DRMtoday Onboard](examples/drm/onboard.html) — DRM-protected DASH playback with licenses from DRMtoday Onboard, the offline DRMtoday for private networks
 - [Custom license server](examples/drm/header_drm.html) — Widevine, PlayReady, and FairPlay license servers that authorize requests with HTTP headers
 - [Persistent license](examples/drm/persistent_license.html) — Store a DRM license on the device, reuse it, and remove it
 - [Custom DRM environment](examples/drm/license_modifiers.html) — Custom DRM environment with license modifiers that authorize requests and unwrap JSON-wrapped licenses
+- [Custom FairPlay key request](examples/drm/fairplay_custom_payload.html) — FairPlay license modifiers that build the key request with your own content ID and talk to a JSON license API
+- [Multiple DRM environments](examples/drm/multiple_environments.html) — One player that switches between assets whose licenses come from DRMtoday and from another license server
+- [Verimatrix VCAS Ultra](examples/drm/verimatrix_vcas.html) — DRM-protected DASH or HLS playback with Widevine, PlayReady, and FairPlay licenses from Verimatrix VCAS Ultra
 
 ### Live
 
@@ -69,10 +74,20 @@ updated are marked with `TODO`.
 ### Advertising
 
 - [Google IMA ads](examples/advertising/ima.html) — Client-side pre-, mid-, and post-roll ads with an ad event log
+- [Ad UI and skipping](examples/advertising/ad_ui.html) — Custom player UI during ads: ad label with countdown, play/pause, seek controls disabled during ads, and a skip button
+- [SIMID interactive ads](examples/advertising/simid.html) — L-banner overlay creatives at set times of the content, with SIMID events
+
+### 360° video
+
+- [360° video](examples/vr/vr.html) — Equirectangular 360° playback with mouse and touch dragging, and camera control from code
 
 ### Thumbnails
 
-- [Basic thumbnail rendering](examples/thumbnails/thumbnails.html) — Retrieve thumbnails for a DASH stream
+- [DASH embedded thumbnails](examples/thumbnails/thumbnails.html) — Thumbnails declared in the DASH manifest, no configuration needed
+- [Single-image thumbnails](examples/thumbnails/single.html) — One image per thumbnail from a URL template (SINGLE mode)
+- [Grid thumbnails](examples/thumbnails/grid.html) — Sprite sheets with many thumbnails each, from a URL template (GRID mode)
+- [WebVTT thumbnails](examples/thumbnails/webvtt.html) — A WebVTT file that maps time ranges to sprite sheet regions (WEBVTT mode)
+- [BIF thumbnails](examples/thumbnails/bif.html) — A single binary BIF file, the Roku thumbnail format (BIF mode)
 
 ### Tracks
 
@@ -105,6 +120,7 @@ updated are marked with `TODO`.
 
 - [Conviva analytics](examples/analytics/conviva.html) — Basic DASH playback with Conviva analytics enabled
 - [Mux Data analytics](examples/analytics/muxdata.html) — Basic DASH playback with Mux Data enabled
+- [Broadpeak analytics and SSAI](examples/analytics/broadpeak.html) — Broadpeak SmartLib analytics and server-side ad tracking with an ad countdown and skip button (needs a Broadpeak stream)
 - [NPAW v7 analytics](examples/analytics/npaw_v7.html) — Basic DASH playback with NPAW v7 analytics enabled
 
 ### Audio

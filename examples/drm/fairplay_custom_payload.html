@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Custom FairPlay key request</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./fairplay_custom_payload.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Custom FairPlay key request</h1>
+    <p class="description">Example of FairPlay license modifiers that build the key request with a content ID from your own data instead of the playlist, send it to a license server in a JSON body, and unwrap the license from a JSON response. The log shows each modifier as it runs.</p>
+    <p class="description"><strong>Setup required:</strong> FairPlay only works in Safari. The modifiers expect the JSON license API described in <code>examples/drm/fairplay_custom_payload.js</code>; adapt them to your license server. Enter its URLs, the content ID, and a FairPlay-protected HLS stream, then load the stream.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="licenseUrl">License URL</label>
+        <input type="text" id="licenseUrl" required placeholder="https://license.example.com/fairplay" autocomplete="off">
+        <label for="certificateUrl">Certificate URL</label>
+        <input type="text" id="certificateUrl" required placeholder="https://license.example.com/fairplay.cer" autocomplete="off">
+        <label for="pid">Content ID</label>
+        <input type="text" id="pid" required autocomplete="off">
+        <p class="hint">The ID your license server knows the asset by, sent as <code>releasePid</code>.</p>
+        <label for="authorization">Authorization</label>
+        <input type="text" id="authorization" placeholder="Basic ..." autocomplete="off">
+        <p class="hint">Value of the <code>Authorization</code> header on license requests.</p>
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" required placeholder="URL of a FairPlay-protected HLS stream" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>

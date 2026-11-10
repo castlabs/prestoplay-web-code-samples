@@ -46,15 +46,20 @@
     <ul>
       <li><a href="examples/player/configuration.html">Player configuration</a> <span class="desc">— Autoplay and the browser autoplay policy, start time, volume, buffering goals, and retries</span></li>
       <li><a href="examples/player/surface.html">Player surface</a> <span class="desc">— Custom container element, an overlay on the video, and style overrides</span></li>
+      <li><a href="examples/player/simple_ui.html">Simple UI</a> <span class="desc">— Minimal custom UI with a poster image and a big play button</span></li>
       <li><a href="examples/player/smart_tv.html">Smart TV</a> <span class="desc">— Suspend and resume handling, a memory-friendly configuration, and remote control keys for Tizen and webOS</span></li>
     </ul>
 
     <h2>DRM</h2>
     <ul>
       <li><a href="examples/drm/drmtoday.html">DRMtoday playback</a> <span class="desc">— DRM-protected DASH playback with licenses from DRMtoday</span></li>
+      <li><a href="examples/drm/onboard.html">DRMtoday Onboard</a> <span class="desc">— DRM-protected DASH playback with licenses from DRMtoday Onboard, the offline DRMtoday for private networks</span></li>
       <li><a href="examples/drm/header_drm.html">Custom license server</a> <span class="desc">— Widevine, PlayReady, and FairPlay license servers that authorize requests with HTTP headers</span></li>
       <li><a href="examples/drm/persistent_license.html">Persistent license</a> <span class="desc">— Store a DRM license on the device, reuse it, and remove it</span></li>
       <li><a href="examples/drm/license_modifiers.html">Custom DRM environment</a> <span class="desc">— Custom DRM environment with license modifiers that authorize requests and unwrap JSON-wrapped licenses</span></li>
+      <li><a href="examples/drm/fairplay_custom_payload.html">Custom FairPlay key request</a> <span class="desc">— FairPlay license modifiers that build the key request with your own content ID and talk to a JSON license API</span></li>
+      <li><a href="examples/drm/multiple_environments.html">Multiple DRM environments</a> <span class="desc">— One player that switches between assets whose licenses come from DRMtoday and from another license server</span></li>
+      <li><a href="examples/drm/verimatrix_vcas.html">Verimatrix VCAS Ultra</a> <span class="desc">— DRM-protected DASH or HLS playback with Widevine, PlayReady, and FairPlay licenses from Verimatrix VCAS Ultra</span></li>
     </ul>
 
     <h2>Live</h2>
@@ -78,11 +83,22 @@
     <h2>Advertising</h2>
     <ul>
       <li><a href="examples/advertising/ima.html">Google IMA ads</a> <span class="desc">— Client-side pre-, mid-, and post-roll ads with an ad event log</span></li>
+      <li><a href="examples/advertising/ad_ui.html">Ad UI and skipping</a> <span class="desc">— Custom player UI during ads: ad label with countdown, play/pause, seek controls disabled during ads, and a skip button</span></li>
+      <li><a href="examples/advertising/simid.html">SIMID interactive ads</a> <span class="desc">— L-banner overlay creatives at set times of the content, with SIMID events</span></li>
+    </ul>
+
+    <h2>360° video</h2>
+    <ul>
+      <li><a href="examples/vr/vr.html">360° video</a> <span class="desc">— Equirectangular 360° playback with mouse and touch dragging, and camera control from code</span></li>
     </ul>
 
     <h2>Thumbnails</h2>
     <ul>
-      <li><a href="examples/thumbnails/thumbnails.html">Basic thumbnail rendering</a> <span class="desc">— Retrieve thumbnails for a DASH stream</span></li>
+      <li><a href="examples/thumbnails/thumbnails.html">DASH embedded thumbnails</a> <span class="desc">— Thumbnails declared in the DASH manifest, no configuration needed</span></li>
+      <li><a href="examples/thumbnails/single.html">Single-image thumbnails</a> <span class="desc">— One image per thumbnail from a URL template (SINGLE mode)</span></li>
+      <li><a href="examples/thumbnails/grid.html">Grid thumbnails</a> <span class="desc">— Sprite sheets with many thumbnails each, from a URL template (GRID mode)</span></li>
+      <li><a href="examples/thumbnails/webvtt.html">WebVTT thumbnails</a> <span class="desc">— A WebVTT file that maps time ranges to sprite sheet regions (WEBVTT mode)</span></li>
+      <li><a href="examples/thumbnails/bif.html">BIF thumbnails</a> <span class="desc">— A single binary BIF file, the Roku thumbnail format (BIF mode)</span></li>
     </ul>
 
     <h2>Tracks</h2>
@@ -121,6 +137,7 @@
     <ul>
       <li><a href="examples/analytics/conviva.html">Conviva analytics</a> <span class="desc">— Basic DASH playback with Conviva analytics enabled</span></li>
       <li><a href="examples/analytics/muxdata.html">Mux Data analytics</a> <span class="desc">— Basic DASH playback with Mux Data enabled</span></li>
+      <li><a href="examples/analytics/broadpeak.html">Broadpeak analytics and SSAI</a> <span class="desc">— Broadpeak SmartLib analytics and server-side ad tracking with an ad countdown and skip button (needs a Broadpeak stream)</span></li>
       <li><a href="examples/analytics/npaw_v7.html">NPAW v7 analytics</a> <span class="desc">— Basic DASH playback with NPAW v7 analytics enabled</span></li>
     </ul>
 

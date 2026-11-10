@@ -47,13 +47,28 @@
   <prestoplay-header back-href="../../index.html"></prestoplay-header>
   <div class="page">
     <h1>Custom DRM environment</h1>
-    <p class="description">Example of a custom DRM environment whose license modifiers add authorization to each license request and unwrap a license that the server returns wrapped in JSON. The stream rotates keys often, so new license requests show up in the log.</p>
+    <p class="description">Example of a custom DRM environment whose license modifiers add authorization to each license request and unwrap a license that the server returns wrapped in JSON.</p>
+    <p class="description"><strong>Setup required:</strong> The modifiers talk to a DRMtoday license server. Enter your DRMtoday license server, the custom data of your merchant, and a stream protected with keys from that account, then load the stream.</p>
     <div>
       <video id="video" controls crossorigin="anonymous" playsinline></video>
     </div>
-    <div class="controls">
-      <button id="loadButton">Load</button>
-    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="licenseServer">License server</label>
+        <input type="text" id="licenseServer" required placeholder="https://lic.staging.drmtoday.com" autocomplete="off">
+        <p class="hint">Base URL of your DRMtoday license server, without a path.</p>
+        <label for="merchant">Merchant</label>
+        <input type="text" id="merchant" required autocomplete="off">
+        <label for="userId">User ID</label>
+        <input type="text" id="userId" autocomplete="off">
+        <label for="sessionId">Session ID</label>
+        <input type="text" id="sessionId" autocomplete="off">
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" required placeholder="URL of a DRM-protected DASH stream" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
     <ul class="log" id="log"></ul>
   </div>
 </body>

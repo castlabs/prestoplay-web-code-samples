@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Multiple DRM environments</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+
+    .asset {
+      margin-top: 24px;
+      padding: 4px 16px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+    }
+
+    .asset h2 {
+      margin-top: 12px;
+    }
+
+    .asset .settings {
+      margin-top: 12px;
+    }
+  </style>
+  <!-- mux.js transmuxes MPEG-TS segments of HLS streams for MSE playback. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./multiple_environments.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Multiple DRM environments</h1>
+    <p class="description">Example of one player that plays assets protected by two different DRM providers. Each asset carries its own DRM configuration: asset 1 gets its licenses from DRMtoday, asset 2 from another license server that authorizes requests with HTTP headers.</p>
+    <p class="description"><strong>Setup required:</strong> Enter a protected stream and its DRM setup for each asset, then switch between them with the play buttons.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <ul class="log" id="log"></ul>
+    <form id="assetForm1" class="asset">
+      <h2>Asset 1: DRMtoday</h2>
+      <div class="settings">
+        <label for="env1">Environment</label>
+        <select id="env1">
+          <option value="DRMtoday_STAGING">Staging (DRMtoday_STAGING)</option>
+          <option value="DRMtoday">Production (DRMtoday)</option>
+        </select>
+        <label for="merchant1">Merchant</label>
+        <input type="text" id="merchant1" required autocomplete="off">
+        <label for="userId1">User ID</label>
+        <input type="text" id="userId1" autocomplete="off">
+        <label for="sessionId1">Session ID</label>
+        <input type="text" id="sessionId1" autocomplete="off">
+      </div>
+        <div class="controls">
+          <input type="text" id="source1" required placeholder="URL of a stream protected with DRMtoday" aria-label="Stream URL">
+          <button type="submit">Play asset 1</button>
+        </div>
+    </form>
+    <form id="assetForm2" class="asset">
+      <h2>Asset 2: other license server</h2>
+      <div class="settings">
+        <label for="widevineLicenseUrl2">Widevine license</label>
+        <input type="text" id="widevineLicenseUrl2" placeholder="https://license.example.com/widevine" autocomplete="off">
+        <label for="playReadyLicenseUrl2">PlayReady license</label>
+        <input type="text" id="playReadyLicenseUrl2" placeholder="https://license.example.com/playready" autocomplete="off">
+        <label for="fairPlayLicenseUrl2">FairPlay license</label>
+        <input type="text" id="fairPlayLicenseUrl2" placeholder="https://license.example.com/fairplay" autocomplete="off">
+        <label for="fairPlayCertificateUrl2">FairPlay certificate</label>
+        <input type="text" id="fairPlayCertificateUrl2" placeholder="https://license.example.com/fairplay.cer" autocomplete="off">
+        <label for="headerName2">Header name</label>
+        <input type="text" id="headerName2" placeholder="Authorization" autocomplete="off">
+        <label for="headerValue2">Header value</label>
+        <input type="text" id="headerValue2" placeholder="Bearer ..." autocomplete="off">
+        <p class="hint">Optional. Sent with every license request.</p>
+      </div>
+        <div class="controls">
+          <input type="text" id="source2" required placeholder="URL of a stream protected by this license server" aria-label="Stream URL">
+          <button type="submit">Play asset 2</button>
+        </div>
+    </form>
+  </div>
+</body>
+</html>

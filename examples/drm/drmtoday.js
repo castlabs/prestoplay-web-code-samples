@@ -2,13 +2,16 @@
  * DRMtoday playback: play a DRM-protected DASH stream with licenses from
  *   castLabs DRMtoday.
  * Modules: cl.mse, cl.dash
- * APIs: player.open({drm: {env, customData: {merchant, userId, sessionId}}}),
+ * APIs: player.open({drm: {env, customData: {merchant, userId, sessionId,
+ *   authToken}}}),
  *   clpp.events.DRM_SESSION_CREATED, clpp.events.DRM_LICENSE_REQUESTED
- * Gotchas: env selects the DRMtoday environment: 'DRMtoday' (production),
- *   'DRMtoday_STAGING' or 'DRMtoday_DEMO'. The player picks the key system
+ * Gotchas: env selects the DRMtoday environment: 'DRMtoday' (production) or
+ *   'DRMtoday_STAGING'. The stream must be encrypted with keys from the same
+ *   merchant and environment. The player picks the key system
  *   (Widevine, PlayReady or FairPlay) the browser supports. DRM playback
  *   needs a secure context (HTTPS or localhost).
- * Page: drmtoday.html provides #video, #log, #loadButton
+ * Page: drmtoday.html provides #video, #log, #loadForm, #sourceUrl, #env,
+ *   #merchant, #userId, #sessionId, #authToken
  */
 import {clpp} from "@castlabs/prestoplay"
 import "@castlabs/prestoplay/cl.mse"
@@ -43,24 +46,27 @@ player.on('error', (event) => {
   }
 });
 
-document.getElementById('loadButton').addEventListener('click', () => {
+const value = id => document.getElementById(id).value.trim();
+
+document.getElementById('loadForm').addEventListener('submit', (event) => {
+  event.preventDefault();
   player.open({
-    // A live stream from the Unified Streaming demo with frequent key
-    // rotation. Each key change triggers a new license request.
-    source: 'https://live.unified-streaming.com/hfkr/hfkr.isml/.mpd',
+    // Your stream, protected with keys stored in your DRMtoday account.
+    source: value('sourceUrl'),
     autoplay: true,
     muted: true,
     drm: {
-      // The DRMtoday environment that issues the licenses.
-      env: 'DRMtoday_DEMO',
-      // DRMtoday custom data. Replace these values with the ones for your
-      // DRMtoday merchant. In production, the backend that authorizes the
-      // user usually provides them, together with an upfront authToken.
+      // The DRMtoday environment that issues the licenses:
+      // 'DRMtoday' (production) or 'DRMtoday_STAGING'.
+      env: value('env'),
+      // DRMtoday custom data for your merchant. In production, the backend
+      // that authorizes the user usually provides these values, together
+      // with an upfront authToken.
       customData: {
-        merchant: 'usp',
-        userId: 'purchase',
-        sessionId: 'default',
-        // authToken: '...',
+        merchant: value('merchant'),
+        userId: value('userId') || undefined,
+        sessionId: value('sessionId') || undefined,
+        authToken: value('authToken') || undefined,
       },
     },
   }).catch((error) => {
