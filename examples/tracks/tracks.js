@@ -11,13 +11,18 @@
  *   setVideoRendition(rendition | null, clearBuffer), isAbrEnabled(),
  *   clpp.Track (id, language, label, kind, renditions), clpp.Rendition
  *   (id, width, height, bandwidth, codec), clpp.events.TRACKS_ADDED,
- *   AUDIO_TRACK_CHANGED, TEXT_TRACK_CHANGED, VIDEO_TRACK_CHANGED
+ *   AUDIO_TRACK_CHANGED, TEXT_TRACK_CHANGED, VIDEO_TRACK_CHANGED (detail:
+ *   abrSelection, width, height, bandwidth), BITRATE_CHANGED (detail: width,
+ *   height, bandwidth)
  * Gotchas: preferredAudioLanguage and preferredTextLanguage take a language
  *   code or an array; the player selects the first available language.
  *   Setting preferredTextLanguage also turns subtitles on. Tracks are
  *   available after TRACKS_ADDED; getTrackManager() returns null before the
  *   content is loaded. setTextTrack(null) turns subtitles off.
- *   setVideoRendition(null) turns ABR back on. Each subtitle format needs its
+ *   setVideoRendition(null) turns ABR back on. VIDEO_TRACK_CHANGED fires
+ *   when a rendition is selected for download; BITRATE_CHANGED fires when it
+ *   is actually on screen. VIDEO_TRACK_CHANGED puts its data in
+ *   event.details (not event.detail) in SDK 6.36. Each subtitle format needs its
  *   parser module. On Safari with native HLS, track metadata is limited and
  *   video track selection isn't supported.
  * Page: tracks.html provides #video, #log, #loadButton, #audioSelect,
@@ -112,8 +117,19 @@ player.on(clpp.events.TEXT_TRACK_CHANGED, () => {
   updateTrackUi();
 });
 
-player.on(clpp.events.VIDEO_TRACK_CHANGED, () => {
+// Fires when a rendition is selected for download, by ABR or by the user.
+// In SDK 6.36 this event carries its data in `details`, not `detail`.
+player.on(clpp.events.VIDEO_TRACK_CHANGED, (event) => {
+  const {abrSelection, height, bandwidth} = event.detail ?? event.details ?? {};
+  log(`VIDEO_TRACK_CHANGED: ${describeRendition({height, bandwidth})} ` +
+    `${abrSelection ? '(ABR)' : '(manual)'}`);
   updateTrackUi();
+});
+
+// Fires when the new rendition is actually on screen, after the buffered
+// content of the previous rendition has played out.
+player.on(clpp.events.BITRATE_CHANGED, (event) => {
+  log(`BITRATE_CHANGED: ${describeRendition(event.detail)}`);
 });
 
 player.on('error', (event) => {
