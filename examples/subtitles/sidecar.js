@@ -71,7 +71,7 @@ document.getElementById('loadButton').addEventListener('click', () => {
     muted: true,
     // The Tears of Steel subtitles start with dialogue at about 0:23.
     // The HLS stream is a different video, so the cues do not match it.
-    startTime: 20,
+    startTime: 23,
     remoteTextTracks: [track],
     // Select the side-loaded track when playback starts.
     preferredTextLanguage: track.language,

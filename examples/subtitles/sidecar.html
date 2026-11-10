@@ -18,6 +18,12 @@
       border: 1px solid var(--border);
       border-radius: 4px;
     }
+
+    /* Center cues that do not set their own alignment. Cues with explicit
+       alignment keep it, because the renderer sets it as an inline style. */
+    .clpp-text-wrapper {
+      text-align: center;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="importmap">
