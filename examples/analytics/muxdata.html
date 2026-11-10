@@ -28,14 +28,23 @@
   <div class="page">
     <h1>Mux Data analytics</h1>
     <p class="description">Example of basic DASH playback with Mux Data enabled.</p>
+    <p class="description">Enter the environment key from your Mux account, then load the stream.</p>
     <p class="description">Open the browser console and filter for <code>mux</code> to inspect analytics logs.</p>
-    <div>
-      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    <!-- The player adds clpp-container when it is created. Setting it here
+         keeps the video styled before the first Load. -->
+    <div class="clpp-container">
+      <video id="video" crossorigin="anonymous" playsinline></video>
     </div>
-    <div class="controls">
-      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
-      <button id="loadButton">Load</button>
-    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="envKey">Environment key</label>
+        <input type="text" id="envKey" required autocomplete="off">
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
+        <button type="submit">Load</button>
+      </div>
+    </form>
   </div>
 </body>
 

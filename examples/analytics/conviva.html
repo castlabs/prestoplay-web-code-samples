@@ -33,13 +33,26 @@
   <div class="page">
     <h1>Conviva analytics</h1>
     <p class="description">Example of basic DASH playback with Conviva analytics enabled.</p>
-    <div>
-      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    <p class="description">Enter the customer key from your Conviva account, then load the stream.</p>
+    <p class="description"><strong>Setup required:</strong> This page sends no data to Conviva until you add the Conviva Core SDK (4.0.3 or later). Conviva provides the SDK directly to its customers; it isn't available on npm. Replace <code>TODO/path/to/conviva-core-sdk.js</code> in <code>examples/analytics/conviva.html</code> with the path to your copy.</p>
+    <!-- The player adds clpp-container when it is created. Setting it here
+         keeps the video styled before the first Load. -->
+    <div class="clpp-container">
+      <video id="video" crossorigin="anonymous" playsinline></video>
     </div>
-    <div class="controls">
-      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
-      <button id="loadButton">Load</button>
-    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="customerKey">Customer key</label>
+        <input type="text" id="customerKey" required autocomplete="off">
+        <label for="serviceUrl">Gateway URL</label>
+        <input type="text" id="serviceUrl" placeholder="https://CUSTOMER.testonly.conviva.com" autocomplete="off">
+        <p class="hint">Test gateway for development. Leave empty in production.</p>
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
+        <button type="submit">Load</button>
+      </div>
+    </form>
   </div>
 </body>
 

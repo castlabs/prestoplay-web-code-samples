@@ -64,9 +64,9 @@ the exception: its code is inline in `examples/react/react.html`.
 - [Thumbnails](examples/thumbnails/thumbnails.js): Seek-bar preview thumbnails for a DASH stream through the thumbnails plugin.
 - [Subtitle text styling](examples/subtitles/text_style.js): Style subtitles with the `textStyle` setting (font, colors, edge type).
 - [SRT subtitles](examples/subtitles/srt.js): Side-load an SRT file with `remoteTextTracks` and select it with `preferredTextLanguage`.
-- [Conviva analytics](examples/analytics/conviva.js): Conviva integration through the `conviva` player config. The vendor SDK is not on npm.
-- [Mux Data analytics](examples/analytics/muxdata.js): Mux Data integration through the `muxdata` player config, plus custom events.
-- [NPAW v7 analytics](examples/analytics/npaw_v7.js): NPAW (Youbora) integration through the `npaw` player config, with a custom `errorFilter`.
+- [Conviva analytics](examples/analytics/conviva.js): Conviva integration through the `conviva` player config, created on Load from the customer key and gateway URL entered on the page. The vendor SDK is not on npm.
+- [Mux Data analytics](examples/analytics/muxdata.js): Mux Data integration through the `muxdata` player config, created on Load from the environment key entered on the page, plus custom events.
+- [NPAW v7 analytics](examples/analytics/npaw_v7.js): NPAW (Youbora) integration through the `npaw` player config, created on Load from the account code entered on the page, with a custom `errorFilter`.
 - [DRMtoday playback](examples/drm/drmtoday.js): DRM-protected DASH from DRMtoday with `drm: {env, customData}`, plus the `DRM_SESSION_CREATED` and `DRM_LICENSE_REQUESTED` events.
 - [Custom license server](examples/drm/header_drm.js): The `HeaderDrm` environment with Widevine, PlayReady and FairPlay license URLs, the FairPlay certificate and custom request headers.
 - [Persistent license](examples/drm/persistent_license.js): Store a license with `drm.offlineId`, the `DRM_SESSION_PERSISTED` event and `clpp.persistent.removeLicense()`.

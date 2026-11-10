@@ -29,14 +29,23 @@
   <div class="page">
     <h1>NPAW v7 analytics</h1>
     <p class="description">Example of basic DASH playback with NPAW v7 analytics enabled.</p>
+    <p class="description">Enter the account code from your NPAW account, then load the stream.</p>
     <p class="description">Open the browser DevTools Network tab and filter for <code>youbora</code> to inspect analytics requests.</p>
-    <div>
-      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    <!-- The player adds clpp-container when it is created. Setting it here
+         keeps the video styled before the first Load. -->
+    <div class="clpp-container">
+      <video id="video" crossorigin="anonymous" playsinline></video>
     </div>
-    <div class="controls">
-      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
-      <button id="loadButton">Load</button>
-    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="accountCode">Account code</label>
+        <input type="text" id="accountCode" required autocomplete="off">
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
+        <button type="submit">Load</button>
+      </div>
+    </form>
     <div class="controls">
       <span>Test out the error filter:</span>
       <button id="triggerRecoverableErrorButton">Trigger recoverable error</button>
