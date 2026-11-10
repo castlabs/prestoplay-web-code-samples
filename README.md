@@ -4,32 +4,17 @@ This repo is your hands-on guide to getting the most out of [PRESTOplay
 for Web Apps]. It is packed with ready-to-run code samples covering everything
 from basic playback to advanced OTT video player features.
 
-- [NPM](https://www.npmjs.com/package/@castlabs/prestoplay)
-- [Home page](https://castlabs.com/playback/prestoplay/browsers/)
-- [API reference](https://players.castlabs.com/web/latest/docs/api)
-- [Manual](https://docs.castlabs.com/prestoplay/web/)
-- [Demo page](https://demo.castlabs.com/)
-- [Contact us](https://castlabs.com/contact/)
+See also
+[Manual](https://docs.castlabs.com/prestoplay/web/),
+[API reference](https://players.castlabs.com/web/latest/docs/api),
+[Home page](https://castlabs.com/playback/prestoplay/browsers/),
+[NPM](https://www.npmjs.com/package/@castlabs/prestoplay),
+[Demo](https://demo.castlabs.com/),
+[Contact us](https://castlabs.com/contact/).
 
-## Try it out
+## LLMs
 
-To run the code samples install the SDK
-
-```sh
-npm i
-```
-
-Serve the HTML files
-
-```sh
-npx http-server -c-1
-```
-
-Open http://127.0.0.1:8080 and choose a code sample to run.
-
-Some samples use third-party libraries or plugins and may require additional
-configuration before they work in your environment. Places that need to be
-updated are marked with `TODO`.
+Point AI agents to the [llms.txt](llms.txt) index file.
 
 ## Samples
 
@@ -128,3 +113,23 @@ updated are marked with `TODO`.
 - [Audio player](examples/audio/audio.html) — Audio-only HLS playback with an audio element and custom controls
 
 [PRESTOplay for Web Apps]: https://demo.castlabs.com/
+
+## Try it out
+
+To run the code samples install the SDK
+
+```sh
+npm i
+```
+
+Serve the HTML files
+
+```sh
+npx http-server -c-1
+```
+
+Open http://127.0.0.1:8080 and choose a code sample to run.
+
+Some samples use third-party libraries or plugins and may require additional
+configuration before they work in your environment. Places that need to be
+updated are marked with `TODO`.
