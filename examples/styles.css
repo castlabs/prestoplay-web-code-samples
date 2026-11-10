@@ -119,3 +119,20 @@ button:hover {
 button:active {
   background: var(--accent-active);
 }
+
+/* Label and input pairs, such as analytics account settings. */
+.settings {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  font-size: 14px;
+}
+
+.settings .hint {
+  grid-column: 2;
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}

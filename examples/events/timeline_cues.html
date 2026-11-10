@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Timeline cues</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    select {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+
+    .log .event {
+      font-weight: 600;
+    }
+
+    .log .detail {
+      color: var(--muted);
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mux.js/6.3.0/mux.min.js" integrity="sha512-mC7/Okc2DQtEIn42I2mpODmNX3NSPrMiAhQt6ua3GsdMe1PRV77EjszmNdhfCriykcsPjd6omd+ZJPdXMxGGkA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./timeline_cues.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Timeline cues</h1>
+    <p class="description">Example of timeline cue events for SCTE-35 events in a DASH manifest and EXT-X-DATERANGE tags in an HLS playlist.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <select id="sourceSelect">
+        <option value="dash">DASH with SCTE-35 events in the MPD</option>
+        <option value="hls">HLS with EXT-X-DATERANGE</option>
+      </select>
+      <button id="loadButton">Load</button>
+    </div>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>

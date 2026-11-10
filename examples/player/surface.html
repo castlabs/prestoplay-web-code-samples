@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Player surface</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Extend the classes the player adds to the container and the video. */
+    .clpp-container {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .clpp-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .clpp-container.fill .clpp-video {
+      object-fit: cover;
+    }
+
+    /* The container is position: relative, so overlays can be absolute. */
+    .title-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .note {
+      margin-top: 20px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./surface.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Player surface</h1>
+    <p class="description">Example of the player surface: your own container element around the <code>&lt;video&gt;</code>, a title overlay added to it, and custom styles for <code>.clpp-container</code> and <code>.clpp-video</code>.</p>
+    <div id="playerContainer">
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <input type="text" id="title" value="Tears of Steel" aria-label="Overlay title">
+      <button id="overlayButton">Toggle overlay</button>
+      <button id="fitButton">Toggle fill</button>
+      <button id="loadButton">Load</button>
+    </div>
+    <p class="note">With <code>disableContainer: true</code> the player uses the <code>&lt;video&gt;</code> element alone. Overlays, subtitles, and ad UIs need the container and may not display. Use it only for audio-only or fully custom rendering.</p>
+  </div>
+</body>
+</html>

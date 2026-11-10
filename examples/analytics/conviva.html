@@ -25,70 +25,7 @@
     }
   </script>
   <script type="module" src="../components/prestoplay-header.js"></script>
-  <script type="module">
-    /**
-     * Conviva analytics: DASH playback reported to Conviva.
-     * Modules: cl.mse, cl.dash, cl.conviva
-     * External: Conviva Core SDK >= 4.0.3 (global script; provided by Conviva, not
-     *   on npm)
-     * APIs: player config `conviva: {customerKey, serviceUrl, viewerId, playerName,
-     *   customTags, enableAdInsights}`, open({source: {url, type, name}})
-     * Gotchas: customerKey and serviceUrl are TODO placeholders; serviceUrl is the
-     *   test gateway and is omitted in production; source.name is reported as the
-     *   asset name.
-     */
-    import {clpp} from "@castlabs/prestoplay"
-    import "@castlabs/prestoplay/cl.mse"
-    import "@castlabs/prestoplay/cl.dash"
-    import "@castlabs/prestoplay/cl.conviva"
-
-    const defaultSource = {
-      name: 'DASH VoD Clear',
-      url: 'https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd'
-    };
-
-    clpp.log.setLogLevel(clpp.log.Level.INFO);
-
-    const videoEl = document.getElementById('video');
-    const containerEl = videoEl.parentElement;
-    const player = new clpp.Player(videoEl, {
-      conviva: {
-        // Fill in the customer key and gateway URL from your Conviva account.
-        customerKey: 'TODO',
-        // Use the test gateway URL during development. Omit it in production.
-        serviceUrl: 'https://TODO.testonly.conviva.com',
-        viewerId: 'example-viewer',
-        playerName: 'PRESTOplay code samples',
-        // Report additional metadata with every session.
-        customTags: {
-          page: 'code-samples',
-        },
-        // Set to true to also report client-side ads to Conviva Ad Insights.
-        enableAdInsights: false,
-      }
-    }, { containerEl });
-
-    const sourceUrlEl = document.getElementById('sourceUrl');
-
-    document.getElementById('loadButton').addEventListener('click', () => {
-      player.open({
-        source: {
-          url: sourceUrlEl.value,
-          type: clpp.Type.DASH,
-          // Reported as the asset name by the integration.
-          name: defaultSource.name
-        },
-        autoplay: true,
-      });
-    });
-
-    player.on('error', event => {
-      const error = event.detail;
-      if (error) {
-        console.warn('Error:', error);
-      }
-    });
-  </script>
+  <script type="module" src="./conviva.js"></script>
 </head>
 
 <body>
@@ -96,13 +33,26 @@
   <div class="page">
     <h1>Conviva analytics</h1>
     <p class="description">Example of basic DASH playback with Conviva analytics enabled.</p>
-    <div>
-      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    <p class="description">Enter the customer key from your Conviva account, then load the stream.</p>
+    <p class="description"><strong>Setup required:</strong> This page sends no data to Conviva until you add the Conviva Core SDK (4.0.3 or later). Conviva provides the SDK directly to its customers; it isn't available on npm. Replace <code>TODO/path/to/conviva-core-sdk.js</code> in <code>examples/analytics/conviva.html</code> with the path to your copy.</p>
+    <!-- The player adds clpp-container when it is created. Setting it here
+         keeps the video styled before the first Load. -->
+    <div class="clpp-container">
+      <video id="video" crossorigin="anonymous" playsinline></video>
     </div>
-    <div class="controls">
-      <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
-      <button id="loadButton">Load</button>
-    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="customerKey">Customer key</label>
+        <input type="text" id="customerKey" required autocomplete="off">
+        <label for="serviceUrl">Gateway URL</label>
+        <input type="text" id="serviceUrl" placeholder="https://CUSTOMER.testonly.conviva.com" autocomplete="off">
+        <p class="hint">Test gateway for development. Leave empty in production.</p>
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd">
+        <button type="submit">Load</button>
+      </div>
+    </form>
   </div>
 </body>
 

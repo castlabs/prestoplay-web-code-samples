@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Player configuration</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .settings {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px 16px;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .settings label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .settings input[type="number"] {
+      width: 70px;
+      padding: 4px 6px;
+      font: inherit;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .settings input[type="range"] {
+      width: 100px;
+      accent-color: var(--accent);
+    }
+
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./configuration.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Player configuration</h1>
+    <p class="description">Example of common <code>player.open()</code> options: autoplay and the browser autoplay policy, start time, volume, buffering goals, and network retries. The page autoplays muted on load; change the settings and press Load to apply them.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <div class="controls">
+      <input type="text" id="sourceUrl" value="https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd">
+      <button id="loadButton">Load</button>
+      <button id="playButton">Play</button>
+      <button id="unmuteButton">Unmute</button>
+    </div>
+    <div class="settings">
+      <label>Autoplay <input type="checkbox" id="autoplay" checked></label>
+      <label>Muted <input type="checkbox" id="muted" checked></label>
+      <label>Volume <input type="range" id="volume" min="0" max="1" step="0.05" value="1"></label>
+      <label>Start time (s) <input type="number" id="startTime" min="0" value="0"></label>
+      <label>Buffering goal (s) <input type="number" id="bufferingGoal" min="1" value="10"></label>
+      <label>Rebuffering goal (s) <input type="number" id="rebufferingGoal" min="0" value="2"></label>
+      <label>Buffer behind (s) <input type="number" id="bufferBehind" min="0" value="30"></label>
+      <label>Segment attempts <input type="number" id="segmentAttempts" min="1" value="5"></label>
+      <label>Manifest attempts <input type="number" id="manifestAttempts" min="1" value="3"></label>
+    </div>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>
