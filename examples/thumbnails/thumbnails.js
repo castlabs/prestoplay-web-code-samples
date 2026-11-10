@@ -24,6 +24,7 @@ async function initPlayer() {
     await player.open({
       source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
       autoplay: true,
+      muted: true,
       preferredTextLanguage: 'en',
     });
   } catch (error) {

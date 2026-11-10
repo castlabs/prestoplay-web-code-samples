@@ -37,6 +37,7 @@ player.on('error', (event) => {
 
 player.open({
   source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
+  muted: true,
   startTime: 23,
   // Side-load the SRT file. The mimeType selects the SRT parser; the
   // player converts the cues to WebVTT internally.

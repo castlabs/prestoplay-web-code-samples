@@ -141,7 +141,7 @@
       // Load content whenever the `src` prop changes.
       useEffect(() => {
         if (src) {
-          playerRef.current.open({source: src, autoplay: true})
+          playerRef.current.open({source: src, autoplay: true, muted: true})
             .catch(error => console.warn('Error:', error));
         }
       }, [src]);

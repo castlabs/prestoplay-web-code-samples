@@ -20,6 +20,7 @@ document.getElementById('loadButton').addEventListener('click', () => {
   player.open({
     source: document.getElementById('sourceUrl').value,
     autoplay: true,
+    muted: true,
     preferredTextLanguage: 'en',
   });
 });

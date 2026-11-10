@@ -63,6 +63,7 @@ const player = new clpp.Player(videoEl, {
 const contentConfig = {
   source: SOURCE,
   autoplay: true,
+  muted: true,
   streaming: {
     bufferingGoal: 10,
     rebufferingGoal: 2,

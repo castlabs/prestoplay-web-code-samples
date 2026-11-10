@@ -30,6 +30,7 @@ playlist.append({
   configuration: {
     source: 'https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd',
     autoplay: true,
+    muted: true,
   },
 });
 playlist.append({
@@ -38,6 +39,7 @@ playlist.append({
   configuration: {
     source: 'https://demo.cf.castlabs.com/media/prestohls/master.m3u8',
     autoplay: true,
+    muted: true,
   },
 });
 playlist.append({
@@ -46,6 +48,7 @@ playlist.append({
   configuration: {
     source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
     autoplay: true,
+    muted: true,
   },
 });
 

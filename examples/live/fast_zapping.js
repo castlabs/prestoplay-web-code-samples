@@ -64,6 +64,7 @@ const playlist = new clpp.playlist.McPlaylist({
 playlist.setItems(CHANNELS.map(channel => ({
   source: {url: channel.url},
   autoplay: true,
+  muted: true,
 })));
 playlist.setIndex(0);
 

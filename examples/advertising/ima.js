@@ -81,6 +81,7 @@ document.getElementById('loadButton').addEventListener('click', () => {
   player.open({
     source: document.getElementById('sourceUrl').value,
     autoplay: true,
+    muted: true,
     ima: {
       // The correlator must be unique for each ad request.
       adTagUrl: AD_TAG_URL + Date.now(),

@@ -32,6 +32,7 @@ player.on('error', (event) => {
 player.open({
   source: 'https://testcontent.castlabs.com/QA/tos_1080_clear/manifest.mpd',
   autoplay: false,
+  muted: true,
   startTime: 27,
   preferredTextLanguage: 'en',
   textStyle: {
