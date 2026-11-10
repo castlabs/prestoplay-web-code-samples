@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Simple UI</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* The player adds clpp-container to .ui-container, so it gets the
+       shared container size from styles.css. It is position: relative. */
+    .ui-poster {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .ui-play-btn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      cursor: pointer;
+      width: 80px;
+      height: 80px;
+      padding: 0;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .ui-play-btn:hover {
+      background: var(--accent);
+    }
+
+    .ui-play-btn svg {
+      display: block;
+      width: 36px;
+      height: 36px;
+      margin: auto;
+      fill: #fff;
+    }
+
+    .ui-container.ui-started .ui-poster,
+    .ui-container.ui-started .ui-play-btn {
+      display: none;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./simple_ui.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Simple UI</h1>
+    <p class="description">Example of a minimal UI: a container around the <code>&lt;video&gt;</code>, a poster image shown before playback starts, and a big play button.</p>
+    <div class="ui-container">
+      <div class="ui-poster" style="background-image: url('poster.jpg');"></div>
+      <button class="ui-play-btn" aria-label="Play">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <video id="video" crossorigin="anonymous" playsinline></video>
+    </div>
+  </div>
+</body>
+</html>

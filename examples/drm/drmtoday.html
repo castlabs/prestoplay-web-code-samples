@@ -47,13 +47,33 @@
   <prestoplay-header back-href="../../index.html"></prestoplay-header>
   <div class="page">
     <h1>DRMtoday playback</h1>
-    <p class="description">Example of DRM-protected DASH playback with licenses from DRMtoday. The stream rotates keys often, so new license requests show up in the log.</p>
+    <p class="description">Example of DRM-protected DASH playback with licenses from DRMtoday.</p>
+    <p class="description"><strong>Setup required:</strong> Enter a stream protected with keys from your DRMtoday account and the custom data of your merchant, then load the stream.</p>
     <div>
       <video id="video" controls crossorigin="anonymous" playsinline></video>
     </div>
-    <div class="controls">
-      <button id="loadButton">Load</button>
-    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="env">Environment</label>
+        <select id="env">
+          <option value="DRMtoday_STAGING">Staging (DRMtoday_STAGING)</option>
+          <option value="DRMtoday">Production (DRMtoday)</option>
+        </select>
+        <label for="merchant">Merchant</label>
+        <input type="text" id="merchant" required autocomplete="off">
+        <label for="userId">User ID</label>
+        <input type="text" id="userId" autocomplete="off">
+        <label for="sessionId">Session ID</label>
+        <input type="text" id="sessionId" autocomplete="off">
+        <label for="authToken">Auth token</label>
+        <input type="text" id="authToken" autocomplete="off">
+        <p class="hint">Upfront authorization token from your backend. Leave empty if you use callback authorization.</p>
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" required placeholder="URL of a DRM-protected DASH stream" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
     <ul class="log" id="log"></ul>
   </div>
 </body>

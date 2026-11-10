@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>DRMtoday Onboard</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.onboard": "../../node_modules/@castlabs/prestoplay/cl.onboard.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./onboard.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>DRMtoday Onboard</h1>
+    <p class="description">Example of DRM-protected DASH playback with licenses from DRMtoday Onboard, the offline DRMtoday server for private networks without internet access, such as on planes, trains, and ships.</p>
+    <p class="description"><strong>Setup required:</strong> Enter the URL of your Onboard server and a stream protected with keys that the server has, then load the stream.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="baseUrl">Onboard server</label>
+        <input type="text" id="baseUrl" required placeholder="https://onboard.example.local/" autocomplete="off">
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" required placeholder="URL of a DRM-protected DASH stream" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>

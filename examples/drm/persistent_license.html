@@ -49,13 +49,32 @@
   <prestoplay-header back-href="../../index.html"></prestoplay-header>
   <div class="page">
     <h1>Persistent license</h1>
-    <p class="description">Example of storing a DRM license on the device. The first load requests a license and stores it. Later loads reuse it until you remove it. Fill in the values marked with TODO first.</p>
+    <p class="description">Example of storing a DRM license on the device. The first load requests a license and stores it. Later loads reuse it until you remove it.</p>
+    <p class="description"><strong>Setup required:</strong> Enter a stream protected with keys from your DRMtoday account and the custom data of your merchant. The license policy must allow persistent licenses.</p>
     <div>
       <video id="video" controls crossorigin="anonymous" playsinline></video>
     </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="env">Environment</label>
+        <select id="env">
+          <option value="DRMtoday_STAGING">Staging (DRMtoday_STAGING)</option>
+          <option value="DRMtoday">Production (DRMtoday)</option>
+        </select>
+        <label for="merchant">Merchant</label>
+        <input type="text" id="merchant" required autocomplete="off">
+        <label for="userId">User ID</label>
+        <input type="text" id="userId" autocomplete="off">
+        <label for="sessionId">Session ID</label>
+        <input type="text" id="sessionId" autocomplete="off">
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" required placeholder="URL of a DRM-protected DASH stream" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
     <div class="controls">
-      <button id="loadButton">Load</button>
-      <button id="removeButton">Remove license</button>
+      <button id="removeButton" type="button">Remove license</button>
     </div>
     <ul class="log" id="log"></ul>
   </div>

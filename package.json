@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@broadpeak/smartlib-all-compatibility": "5.4.4-808048b",
     "@castlabs/prestoplay": "^6.36.0"
   }
 }

@@ -19,7 +19,8 @@
  *   that only needs fixed headers, the built-in 'DRMtoday' and 'HeaderDrm'
  *   environments are simpler. DRM playback needs a secure context (HTTPS or
  *   localhost).
- * Page: license_modifiers.html provides #video, #log, #loadButton
+ * Page: license_modifiers.html provides #video, #log, #loadForm, #sourceUrl,
+ *   #licenseServer, #merchant, #userId, #sessionId
  */
 import {clpp} from "@castlabs/prestoplay"
 import "@castlabs/prestoplay/cl.mse"
@@ -34,20 +35,22 @@ function log(message) {
   logEl.prepend(item);
 }
 
-// This sample talks to the DRMtoday demo license server directly instead of
-// using the built-in 'DRMtoday' environment, so that the modifiers have
-// something real to do. Replace the URLs and the modifier logic with what
-// your license server needs.
-const LICENSE_SERVER = 'https://lic-demo.staging.drmtoday.com';
+// This sample talks to a DRMtoday license server directly instead of using
+// the built-in 'DRMtoday' environment, so that the modifiers have something
+// real to do. Replace the URLs and the modifier logic with what your license
+// server needs.
+
+const value = id => document.getElementById(id).value.trim();
 
 // Stands in for a call to your own backend, which authorizes the user and
-// returns the data the license server needs for this content.
+// returns the data the license server needs for this content. Here it
+// returns the DRMtoday custom data entered on the page.
 async function fetchLicenseAuthorization() {
   await new Promise(resolve => setTimeout(resolve, 100));
   return {
-    merchant: 'usp',
-    userId: 'purchase',
-    sessionId: 'default',
+    merchant: value('merchant'),
+    userId: value('userId') || undefined,
+    sessionId: value('sessionId') || undefined,
   };
 }
 
@@ -90,23 +93,27 @@ function unwrapJsonLicense(config, response, sessionContext) {
 }
 
 // A custom DRM environment with one configuration per key system. The
-// player picks the key system that the browser supports.
-const environment = new clpp.drm.DrmEnvironment('sampleLicenseProxy');
-environment.setDrmSystem(clpp.drm.KeySystem.WIDEVINE, {
-  licenseUrl: `${LICENSE_SERVER}/license-proxy-widevine/cenc/`,
-  modifiers: {
-    licenseRequest,
-    licenseResponse: unwrapJsonLicense,
-  },
-});
-environment.setDrmSystem(clpp.drm.KeySystem.PLAYREADY, {
-  licenseUrl: `${LICENSE_SERVER}/license-proxy-headerauth/drmtoday/RightsManager.asmx`,
-  modifiers: {
-    // The PlayReady license comes back raw, so no response modifier.
-    licenseRequest,
-  },
-});
-clpp.drm.registerDrmEnvironment(environment);
+// player picks the key system that the browser supports. Registering an
+// environment under a name that exists replaces it, so this runs on each
+// load with the license server entered on the page.
+function registerLicenseProxyEnvironment(licenseServer) {
+  const environment = new clpp.drm.DrmEnvironment('sampleLicenseProxy');
+  environment.setDrmSystem(clpp.drm.KeySystem.WIDEVINE, {
+    licenseUrl: `${licenseServer}/license-proxy-widevine/cenc/`,
+    modifiers: {
+      licenseRequest,
+      licenseResponse: unwrapJsonLicense,
+    },
+  });
+  environment.setDrmSystem(clpp.drm.KeySystem.PLAYREADY, {
+    licenseUrl: `${licenseServer}/license-proxy-headerauth/drmtoday/RightsManager.asmx`,
+    modifiers: {
+      // The PlayReady license comes back raw, so no response modifier.
+      licenseRequest,
+    },
+  });
+  clpp.drm.registerDrmEnvironment(environment);
+}
 
 // A second environment, for FairPlay (HLS on Safari). Each environment needs
 // a unique name; select one with drm.env in player.open(). Not used by the
@@ -145,11 +152,14 @@ player.on('error', (event) => {
   }
 });
 
-document.getElementById('loadButton').addEventListener('click', () => {
+document.getElementById('loadForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  // Register before player.open(), which looks the environment up by name.
+  registerLicenseProxyEnvironment(value('licenseServer').replace(/\/+$/, ''));
+
   player.open({
-    // A live stream from the Unified Streaming demo with frequent key
-    // rotation. Each key change triggers a new license request.
-    source: 'https://live.unified-streaming.com/hfkr/hfkr.isml/.mpd',
+    // Your stream, protected with keys stored in your DRMtoday account.
+    source: value('sourceUrl'),
     autoplay: true,
     muted: true,
     drm: {

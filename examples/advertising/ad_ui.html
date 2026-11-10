@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Ad UI and skipping</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .clpp-container {
+      position: relative;
+    }
+
+    .ad-label {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      pointer-events: none;
+    }
+
+    .player-controls {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .player-controls .seek {
+      flex: 1;
+      min-width: 60px;
+      accent-color: var(--accent);
+    }
+
+    .player-controls .time {
+      font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .player-controls button {
+      min-width: 76px;
+    }
+
+    button:disabled,
+    select:disabled,
+    input:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+  <!-- The Google IMA SDK must be loaded before the PRESTOplay IMA plugin is used. -->
+  <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.ima": "../../node_modules/@castlabs/prestoplay/cl.ima.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./ad_ui.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Ad UI and skipping</h1>
+    <p class="description">Example of a custom player UI that reacts to ads: an ad label with the position in the ad break and the time left, a play/pause button that stays correct during ads, seek and playback rate controls that are disabled while ads play, and a skip button for skippable ads.</p>
+    <p class="description">Ad blockers prevent the IMA SDK from loading. Disable them for this page.</p>
+    <div class="clpp-container">
+      <video id="video" crossorigin="anonymous" playsinline></video>
+      <div id="adLabel" class="ad-label" hidden></div>
+    </div>
+    <div class="player-controls">
+      <button id="playButton" type="button">Play</button>
+      <input type="range" id="seekBar" class="seek" min="0" max="0" step="0.1" value="0" aria-label="Seek">
+      <span id="time" class="time">0:00 / 0:00</span>
+      <select id="rateSelect" aria-label="Playback rate">
+        <option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option>
+        <option value="1.5">1.5×</option>
+        <option value="2">2×</option>
+      </select>
+      <button id="skipButton" type="button" hidden>Skip ad</button>
+    </div>
+    <div class="controls">
+      <select id="adTag" aria-label="Ad tag">
+        <option value="skippable">Skippable pre-roll</option>
+        <option value="pods">Pre-roll, mid-roll pod, and post-roll</option>
+      </select>
+      <button id="loadButton">Load</button>
+    </div>
+  </div>
+</body>
+</html>

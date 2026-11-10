@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Broadpeak analytics and SSAI</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .clpp-container {
+      position: relative;
+    }
+
+    .ad-overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      pointer-events: none;
+    }
+
+    .ad-overlay .badge {
+      margin-right: 6px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: #f90;
+      color: #000;
+      font-weight: 700;
+    }
+
+    .skip-button {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .skip-button:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .ad-log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .ad-log:empty {
+      display: none;
+    }
+
+    .ad-log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ad-log li:last-child {
+      border-bottom: none;
+    }
+
+    .ad-log .event {
+      font-weight: 600;
+    }
+
+    .ad-log .detail {
+      color: var(--muted);
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+  </style>
+  <!--
+    Broadpeak SmartLib must be loaded before the PRESTOplay Broadpeak plugin
+    is used. `npm i` installs it from Broadpeak's registry (see .npmrc).
+  -->
+  <script src="../../node_modules/@broadpeak/smartlib-all-compatibility/base.smartlib.js"></script>
+  <script src="../../node_modules/@broadpeak/smartlib-all-compatibility/analytics.smartlib.js"></script>
+  <script src="../../node_modules/@broadpeak/smartlib-all-compatibility/ad.smartlib.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.broadpeak": "../../node_modules/@castlabs/prestoplay/cl.broadpeak.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./broadpeak.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Broadpeak analytics and SSAI</h1>
+    <p class="description">Example of DASH playback with Broadpeak analytics and tracking of server-side inserted (SSAI) ads, with an ad countdown, a skip button, and an ad event log.</p>
+    <p class="description"><strong>Setup required:</strong> Broadpeak sessions only start for streams delivered by a Broadpeak CDN. Enter a stream URL from your Broadpeak CDN, its domain, and your analytics server, then load the stream. The default castLabs stream plays without a Broadpeak session.</p>
+    <!-- The player adds clpp-container when it is created. Setting it here
+         keeps the video styled before the first Load. -->
+    <div class="clpp-container">
+      <video id="video" crossorigin="anonymous" playsinline></video>
+      <div id="adOverlay" class="ad-overlay" hidden>
+        <span class="badge">AD</span><span id="adCount"></span> · <span id="adCountdown"></span>
+      </div>
+      <button id="skipButton" class="skip-button" type="button" hidden></button>
+    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="domainNames">Broadpeak domains</label>
+        <input type="text" id="domainNames" placeholder="TODO: cdn.example.com" autocomplete="off">
+        <p class="hint">Comma-separated CDN domains that get a Broadpeak session. <code>*</code> for all, but then streams from other CDNs fail to load.</p>
+        <label for="analyticsAddress">Analytics server</label>
+        <input type="text" id="analyticsAddress" placeholder="TODO: https://analytics.example.com" autocomplete="off">
+        <p class="hint">Leave empty to send no analytics.</p>
+        <span></span>
+        <label class="checkbox"><input type="checkbox" id="adTracking" checked> Track SSAI ads</label>
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" value="https://demo.cf.castlabs.com/media/prestodash/Manifest.mpd" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
+    <ul id="adLog" class="ad-log"></ul>
+  </div>
+</body>
+
+</html>

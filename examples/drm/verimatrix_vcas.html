@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Verimatrix VCAS Ultra</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../../node_modules/@castlabs/prestoplay/clpp.styles.css">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .log {
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .log li {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log li:last-child {
+      border-bottom: none;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "@castlabs/prestoplay": "../../node_modules/@castlabs/prestoplay/cl.core.js",
+        "@castlabs/prestoplay/cl.mse": "../../node_modules/@castlabs/prestoplay/cl.mse.js",
+        "@castlabs/prestoplay/cl.dash": "../../node_modules/@castlabs/prestoplay/cl.dash.js",
+        "@castlabs/prestoplay/cl.hls": "../../node_modules/@castlabs/prestoplay/cl.hls.js",
+        "@castlabs/prestoplay/cl.verimatrix": "../../node_modules/@castlabs/prestoplay/cl.verimatrix.js"
+      }
+    }
+  </script>
+  <script type="module" src="../components/prestoplay-header.js"></script>
+  <script type="module" src="./verimatrix_vcas.js"></script>
+</head>
+
+<body>
+  <prestoplay-header back-href="../../index.html"></prestoplay-header>
+  <div class="page">
+    <h1>Verimatrix VCAS Ultra</h1>
+    <p class="description">Example of DRM-protected DASH or HLS playback with licenses from Verimatrix VCAS Ultra.</p>
+    <p class="description"><strong>Setup required:</strong> Enter a stream protected with Verimatrix VCAS Ultra, the device ID, and your license servers, then load the stream. Only the license servers for the key systems you use are needed: Widevine on Chrome, Firefox, and Edge, PlayReady on Edge and smart TVs, and FairPlay on Safari.</p>
+    <div>
+      <video id="video" controls crossorigin="anonymous" playsinline></video>
+    </div>
+    <form id="loadForm">
+      <div class="settings">
+        <label for="deviceId">Device ID</label>
+        <input type="text" id="deviceId" required autocomplete="off">
+        <p class="hint">The device&rsquo;s Verimatrix unique identifier (VUID).</p>
+        <label for="authenticator">Authenticator</label>
+        <input type="text" id="authenticator" autocomplete="off">
+        <p class="hint">Optional token for your Subscriber Management System.</p>
+        <label for="vuidLocation">Send IDs in</label>
+        <select id="vuidLocation">
+          <option value="query">Query string</option>
+          <option value="header">HTTP headers</option>
+        </select>
+        <label for="widevineLicenseUrl">Widevine license</label>
+        <input type="text" id="widevineLicenseUrl" placeholder="https://widevine.example.com:8063" autocomplete="off">
+        <label for="playReadyLicenseUrl">PlayReady license</label>
+        <input type="text" id="playReadyLicenseUrl" placeholder="https://playready.example.com/PlayReady/rightsmanager.asmx" autocomplete="off">
+        <label for="fairPlayLicenseUrl">FairPlay license</label>
+        <input type="text" id="fairPlayLicenseUrl" placeholder="https://fairplay.example.com:8064/fpsa/v1.0/" autocomplete="off">
+        <label for="fairPlayCertificateUrl">FairPlay certificate</label>
+        <input type="text" id="fairPlayCertificateUrl" placeholder="https://example.com/certs/fairplay.cer" autocomplete="off">
+      </div>
+      <div class="controls">
+        <input type="text" id="sourceUrl" required placeholder="URL of a DRM-protected DASH or HLS stream" aria-label="Stream URL">
+        <button type="submit">Load</button>
+      </div>
+    </form>
+    <ul class="log" id="log"></ul>
+  </div>
+</body>
+</html>
