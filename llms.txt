@@ -105,8 +105,8 @@ the exception: its code is inline in `examples/react/react.html`.
 
 ## Documentation
 
-- [API reference](https://players.castlabs.com/web/latest/docs/api)
-- [Manual](https://docs.castlabs.com/prestoplay/web/)
-- [npm package](https://www.npmjs.com/package/@castlabs/prestoplay)
-- [Demo page](https://demo.castlabs.com/)
-- [Product page](https://castlabs.com/playback/prestoplay/browsers/)
+- [API reference](https://players.castlabs.com/web/latest/docs/llms.txt)
+- [Manual](https://docs.castlabs.com/prestoplay/web/llms.txt)
+- [NPM package](https://www.npmjs.com/package/@castlabs/prestoplay) for humans
+- [Demo page](https://demo.castlabs.com/) for humans
+- [Product page](https://castlabs.com/playback/prestoplay/browsers/) for humans
