@@ -14,7 +14,7 @@ See also
 
 ## LLMs
 
-Point AI agents to the [llms.txt](llms.txt) index file.
+Point AI agents to the [llms.txt](https://raw.githubusercontent.com/castlabs/prestoplay-web-code-samples/main/llms.txt) index file.
 
 ## Samples
 
